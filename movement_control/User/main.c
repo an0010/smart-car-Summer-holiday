@@ -12,7 +12,12 @@
 #include "hcsr04_driver.h"
 #include "pid.h"
 
-void clear_array(int32_t* array, int32_t length);
+void clear_array(int32_t* array, int32_t length) {
+	int i = 0;
+	for (i = 0; i < length; i++) {
+		array[i] = 0;
+	}
+}
 
 int ball_center(int ball) {
 	if (ball >= 30 && ball <= 50) {
@@ -30,6 +35,67 @@ int gate_center(int gate) {
 	}
 }
 
+void UpdatePosi(int* pball, int* pgate, int* pball_status, int receive) {
+	if (receive >= 0 && receive <= 100) {
+		*pgate = receive;
+	} else { 
+		if (receive > 100 && receive <= 150) {
+			*pball = (receive - 100) * 2;
+			*pball_status = 1;
+		} else if (receive > 150 && receive < 200) {
+			*pball = (receive - 150) * 2;
+			*pball_status = 2;
+		} else {
+			*pball = -1;
+			*pball_status = 0;
+		}
+	}
+}
+
+void UpdateState(int ball, int gate, int ball_status, int* pstate) {
+    int currentstate = *pstate
+
+}
+
+        // judge state (whether to change state)
+		if (state == 0) {
+			if (ball_status == 2) {
+				if (ball_center(ball) == 1) {
+					state = 11;
+				} else {
+					state = 10;
+				}
+			}
+		} else if (state == 10) {
+			if (ball_status == 0 || ball_status == 1) {
+				state = 0;
+			} else if (ball_center(ball) == 1) {
+				state = 11;
+			} 
+		} else if (state == 11) {
+			// if (ball_status == 0) {
+			// 	state = 0;
+			// } else 
+			if (ball_center(ball) == 0) {
+				state = 10;
+			} 
+			else if (gate_center(gate) == 1) {
+				state = 2;
+			}
+		} else if (state == 2) {
+			if (ball_status == 0 /*|| ball_status == 1*/) {
+				state = 0;
+			} else  {
+				if (gate_center(gate) == 0) {
+					state = 11;
+				}
+				// } else {
+				// 	state = 10;
+				// }
+			// }
+			}
+		}
+
 /*!
 	\brief      main function
 	\param[in]  none
@@ -38,13 +104,15 @@ int gate_center(int gate) {
 */
 int main(void) {
 	char txt[32];
-	uint16_t Dis = 0.0;
+	// uint16_t Dis = 0.0;
 
+	// init the system clock
 	systick_config();
 	rcu_ahb_clock_config(RCU_AHB_CKSYS_DIV1);
 	systick_config();						
 	rcu_periph_clock_enable(RCU_AF);	
 
+	// init the encoder
 	encoder1_config();
 	encoder2_config();
 	encoder3_config();
@@ -56,13 +124,12 @@ int main(void) {
 	OLED_CLS();
 	Motor_Init();
 	OLED_Init();   
-	OLED_P6x8Str(10, 0, "Test HCSR04 ");
+	OLED_P6x8Str(10, 0, "---KILLER ROBOT---");
 	delay_1ms(50);
-	
 	USART2_Init(115200);   
-	int32_t receive_num = 0;
-	int32_t ball = 0;
-	int32_t gate = 0;
+
+	int32_t ball = 0;        // Ball position
+	int32_t gate = 0;        // Gate position
 	int32_t ball_status = 0; // 0: not found; 1: found, not reached; 2: reached
 
 	int32_t Enc1 = 0;
@@ -108,60 +175,9 @@ int main(void) {
 		Enc2 = ENC_Read(ENCODER1_TIMER);
 		Enc3 = ENC_Read(ENCODER2_TIMER);
 
-        receive_num = Test_UASRT2();
-		if (receive_num >= 0 && receive_num <= 100) {
-			gate = receive_num;
-		} else { 
-			if (receive_num > 100 && receive_num <= 150) {
-				ball = (receive_num - 100) * 2;
-				ball_status = 1;
-			} else if (receive_num > 150 && receive_num < 200) {
-				ball = (receive_num - 150) * 2;
-				ball_status = 2;
-			} else {
-                ball = -1;
-				ball_status = 0;
-			}
-		}
+		UpdatePosi(&ball, &gate, &ball_status, Test_UASRT2());
 
-        // judge state (whether to change state)
-		if (state == 0) {
-			if (ball_status == 2) {
-				if (ball_center(ball) == 1) {
-					state = 11;
-				} else {
-					state = 10;
-				}
-			}
-		} else if (state == 10) {
-			if (ball_status == 0 || ball_status == 1) {
-				state = 0;
-			} else if (ball_center(ball) == 1) {
-				state = 11;
-			} 
-		} else if (state == 11) {
-			// if (ball_status == 0) {
-			// 	state = 0;
-			// } else 
-			if (ball_center(ball) == 0) {
-				state = 10;
-			} 
-			else if (gate_center(gate) == 1) {
-				state = 2;
-			}
-		} else if (state == 2) {
-			if (ball_status == 0 /*|| ball_status == 1*/) {
-				state = 0;
-			} else  {
-				if (gate_center(gate) == 0) {
-					state = 11;
-				}
-				// } else {
-				// 	state = 10;
-				// }
-			// }
-		}
-		}
+
 
 		//从左到右 1 0 2 3
 		//flag为1：向右转
@@ -293,12 +309,5 @@ int main(void) {
 
 		led_toggle();
 		delay_1ms(50);
-	}
-}
-
-void clear_array(int32_t* array, int32_t length) {
-	int i = 0;
-	for (i = 0; i < length; i++) {
-		array[i] = 0;
 	}
 }
