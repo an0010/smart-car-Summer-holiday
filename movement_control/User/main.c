@@ -132,10 +132,10 @@ int main(void) {
 	int32_t gate = 0;        // Gate position
 	int32_t ball_status = 0; // 0: not found; 1: found, not reached; 2: reached
 
-	int32_t Enc1 = 0;
-	int32_t Enc2 = 0;
-	int32_t Enc3 = 0;
-	int32_t ENC = 0;	
+	int32_t Enc1 = 0; //front wheel
+	int32_t Enc2 = 0; //behind-right wheel
+	int32_t Enc3 = 0; //behind-left wheel
+	int32_t ENC = 0;  //goal speed
 
 	int PWM1 = 0;
 	int PWM2 = 0;
@@ -171,9 +171,9 @@ int main(void) {
 		// sensor_Value[2] = Read_sensor(sensor3);
 		// sensor_Value[3] = Read_sensor(sensor4);
 
-		Enc1 = ENC_Read(ENCODER3_TIMER);
-		Enc2 = ENC_Read(ENCODER1_TIMER);
-		Enc3 = ENC_Read(ENCODER2_TIMER);
+		Enc1 = ENC_Read(ENCODER1_TIMER);
+		Enc2 = ENC_Read(ENCODER2_TIMER);
+		Enc3 = ENC_Read(ENCODER3_TIMER);
 
 		UpdatePosi(&ball, &gate, &ball_status, Test_UASRT2());
 
@@ -298,7 +298,7 @@ int main(void) {
 		}
 
 
-		MotorCtrl3W(PWM2, PWM3, PWM1);
+		MotorCtrl3W(PWM1, PWM2, PWM3);
 
 		sprintf(txt, "ball: %d", ball);
 		OLED_P6x8Str(0, 2, txt); // �ַ���
