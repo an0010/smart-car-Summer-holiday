@@ -106,19 +106,19 @@ def search_ball(img):
     if blobs:
         max_blob = blobs[0]
         for blob in blobs:
-            print("blob.roundness:",blob.roundness())
-            print("blob.area():",blob.area())
+#            print("blob.roundness:",blob.roundness())
+#            print("blob.area():",blob.area())
             if (blob.roundness()>max_blob.roundness() and blob.roundness() > 0.60) or (blob.area()>max_blob.area() and blob.area()>15000):
                 max_blob = blob
 
         # case 1: ball is far and round
         if max_blob.roundness()>0.60:
             circle_tuple = max_blob.enclosing_circle()
-#            img.draw_circle(circle_tuple)
+            img.draw_circle(circle_tuple)
             x = int(circle_tuple[0]/(165/50) + 100)
             # print("circ_roundness", max_blob.roundness())
             # print("circ_area", max_blob.area())
-            print("circ_x:", x)
+#            print("circ_x:", x)
 
             #whether the ball is too close
             if max_blob.area()>7000:
@@ -128,11 +128,11 @@ def search_ball(img):
         # case 2: ball is near so it is not round
         elif max_blob.area()>25000:
             circle_tuple = max_blob.enclosing_circle()
-#            img.draw_circle(circle_tuple)
+            img.draw_circle(circle_tuple)
             x = int(circle_tuple[0]/(165/100) + 100)
 #            print("circ_roundness", max_blob.roundness())
 #            print("circ_area", max_blob.area())
-            print("circ_x:", x)
+#            print("circ_x:", x)
 
             #whether the ball is too close
             if max_blob.area()>7000:
@@ -172,9 +172,11 @@ if __name__ == "__main__":
         ball_x = search_ball(img)
         gate_x = search_gate(img)
 
-        uart.writechar(ball_cx) # 100-200: ball position, 100-150: ball is far, 150-200: ball is near, 200: no ball
-        time.sleep(0.03)
-        uart.writechar(gate_cx) # 0-100: gate position, 100: no gate
-
-
-
+        uart.writechar(255) # start byte
+        uart.writechar(253)
+        uart.writechar(ball_x) # 100-200: ball position, 100-150: ball is far, 150-200: ball is near, 200: no ball
+        print("ball_cx:", ball_x)
+        uart.writechar(gate_x) # 0-100: gate position, 100: no gate
+        print("gate_cx:", gate_x)
+        uart.writechar(ball_cx)
+        uart.writechar(254)
