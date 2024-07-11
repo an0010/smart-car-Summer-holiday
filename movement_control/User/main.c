@@ -19,82 +19,63 @@ void clear_array(int32_t* array, int32_t length) {
 	}
 }
 
-int ball_center(int ball) {
-	if (ball >= 30 && ball <= 50) {
-		return 1;
-	} else {
+//return [0:center; 1:slightly right; 2:far right; -1:slightly left; -2:far left]
+int Judgeballposi(int ball) {
+	int centerposi = 50;
+	if (ball >= 0.8 * centerposi && ball <= 1.2 * centerposi) {
 		return 0;
+	} else if (ball < 0.8 * centerposi && ball >= 0.5 * centerposi) {
+		return -1;
+	} else if (ball > 1.2 * centerposi && ball <= 1.5 * centerposi) {
+		return 1;
+	} else if (ball < 0.5 * centerposi) {
+		return -2;
+	} else {
+		return 2;
 	}
 }
 
 int gate_center(int gate) {
-	if (gate >= 25 && gate <= 50) {
+	int centerposi = 50;
+	if (gate >= 0.5 * centerposi && gate <= 1.5 * centerposi) {
 		return 1;
 	} else {
 		return 0;
 	}
 }
 
-void UpdatePosi(int* pball, int* pgate, int* pball_status, int receive) {
-	if (receive >= 0 && receive <= 100) {
-		*pgate = receive;
-	} else { 
-		if (receive > 100 && receive <= 150) {
-			*pball = (receive - 100) * 2;
-			*pball_status = 1;
-		} else if (receive > 150 && receive < 200) {
-			*pball = (receive - 150) * 2;
-			*pball_status = 2;
+void UpdateState(int ball, int gate, int ball_status, int* pstate) {
+    int currentstate = *pstate;
+    if (currentstate == 0) {
+		if (ball_status == 2) {
+			if (Judgeballposi(ball) == 0) {
+				*pstate = 11;
+			} else {
+				*pstate = 10;
+			}
+		}
+	} else if (currentstate == 10) {
+		if (ball_status == 0 || ball_status == 1) {
+			*pstate = 0;
+		} else if (Judgeballposi(ball) == 0) {
+			*pstate = 11;
+		}
+	} else if (currentstate == 11) {
+		if (Judgeballposi(ball) != 0) {
+			*pstate = 10;
+		} else if (gate_center(gate) == 1) {
+			*pstate = 2;
+		}
+	} else if (currentstate == 2) {
+		if (ball_status == 0) {
+			*pstate = 0;
 		} else {
-			*pball = -1;
-			*pball_status = 0;
+			if (gate_center(gate) == 0) {
+				*pstate = 11;
+			}
 		}
 	}
 }
-
-void UpdateState(int ball, int gate, int ball_status, int* pstate) {
-    int currentstate = *pstate
-
-}
-
-        // judge state (whether to change state)
-		if (state == 0) {
-			if (ball_status == 2) {
-				if (ball_center(ball) == 1) {
-					state = 11;
-				} else {
-					state = 10;
-				}
-			}
-		} else if (state == 10) {
-			if (ball_status == 0 || ball_status == 1) {
-				state = 0;
-			} else if (ball_center(ball) == 1) {
-				state = 11;
-			} 
-		} else if (state == 11) {
-			// if (ball_status == 0) {
-			// 	state = 0;
-			// } else 
-			if (ball_center(ball) == 0) {
-				state = 10;
-			} 
-			else if (gate_center(gate) == 1) {
-				state = 2;
-			}
-		} else if (state == 2) {
-			if (ball_status == 0 /*|| ball_status == 1*/) {
-				state = 0;
-			} else  {
-				if (gate_center(gate) == 0) {
-					state = 11;
-				}
-				// } else {
-				// 	state = 10;
-				// }
-			// }
-			}
-		}
 
 /*!
 	\brief      main function
@@ -175,8 +156,9 @@ int main(void) {
 		Enc2 = ENC_Read(ENCODER1_TIMER);
 		Enc3 = ENC_Read(ENCODER2_TIMER);
 
-		UpdatePosi(&ball, &gate, &ball_status, Test_UASRT2());
 
+
+		UpdateState(ball, gate, ball_status, &state);
 
 
 		//从左到右 1 0 2 3
@@ -184,7 +166,7 @@ int main(void) {
 
 		if (state == 0) {
             if (ball_status == 1) {
-				if (ball >= 35 && ball <= 45) {
+				if (Judgeballposi(ball) == 0){
 					// Enc3 = -Enc1;
 					pid_speed(Enc1, Enc3, ENC, SUM_pid_speed_1, SUM_pid_speed_3, &PWM1, &PWM3, last_ENC__1_2, last_ENC__1_3);
 					PWM2 = 0;
@@ -192,23 +174,15 @@ int main(void) {
 					search_time = 0;
 					clear_array(SUM_pid_speed_turn_1, 50);
 					clear_array(SUM_pid_speed_turn_3, 50);
-				} else if (ball > 45 && ball <= 50){
+				} else if (Judgeballposi(ball) == 1) {
 					// Enc3 = -Enc1;
-					pid_speed_both_ENC(Enc1, Enc3,ENC, ENC+2, SUM_pid_speed_1, SUM_pid_speed_3, &PWM1, &PWM3, last_ENC__1_2, last_ENC__1_3);
+					pid_speed_both_ENC(Enc1, Enc3, ENC, ENC + 3, SUM_pid_speed_1, SUM_pid_speed_3, &PWM1, &PWM3, last_ENC__1_2, last_ENC__1_3);
 					PWM2 = 0;
 					turn_flag = 1;
 					search_time = 0;
 					clear_array(SUM_pid_speed_turn_1, 50);
 					clear_array(SUM_pid_speed_turn_3, 50);
-				} else if (ball > 50 && ball < 60){
-					// Enc3 = -Enc1;
-					pid_speed_both_ENC(Enc1, Enc3,ENC, ENC+4, SUM_pid_speed_1, SUM_pid_speed_3, &PWM1, &PWM3, last_ENC__1_2, last_ENC__1_3);
-					PWM2 = 0;
-					turn_flag = 1;
-					search_time = 0;
-					clear_array(SUM_pid_speed_turn_1, 50);
-					clear_array(SUM_pid_speed_turn_3, 50);
-				} else if (ball > 60){
+				} else if (Judgeballposi(ball) == 2) {
 					// Enc3 = Enc1;
 					pid_speed(Enc1, Enc3,ENC * 0.5, SUM_pid_speed_turn_1, SUM_pid_speed_turn_3, &PWM1, &PWM3, last_ENC__1_2, last_ENC__1_3);
 					PWM1 = PWM3;
@@ -217,25 +191,17 @@ int main(void) {
 					search_time = 0;
 					clear_array(SUM_pid_speed_1, 50);
 					clear_array(SUM_pid_speed_3, 50);
-				} else if (ball >= 30 && ball < 35){
+				} else if (Judgeballposi(ball) == -1) {
 					// Enc3 = -Enc1;
-					pid_speed_both_ENC(Enc1, Enc3,ENC+2, ENC, SUM_pid_speed_1, SUM_pid_speed_3, &PWM1, &PWM3, last_ENC__1_2, last_ENC__1_3);
+					pid_speed_both_ENC(Enc1, Enc3, ENC + 3, ENC, SUM_pid_speed_1, SUM_pid_speed_3, &PWM1, &PWM3, last_ENC__1_2, last_ENC__1_3);
 					PWM2 = 0;
 					turn_flag = -1;
 					search_time = 0;
 					clear_array(SUM_pid_speed_turn_1, 50);
 					clear_array(SUM_pid_speed_turn_3, 50);
-				} else if (ball >= 20 && ball < 30){
-					// Enc3 = -Enc1;
-					pid_speed_both_ENC(Enc1, Enc3,ENC+4, ENC, SUM_pid_speed_1, SUM_pid_speed_3, &PWM1, &PWM3, last_ENC__1_2, last_ENC__1_3);
-					PWM2 = 0;
-					turn_flag = -1;
-					search_time = 0;
-					clear_array(SUM_pid_speed_turn_1, 50);
-					clear_array(SUM_pid_speed_turn_3, 50);
-				} else if (ball < 20 && ball >= 0){
+				} else if (Judgeballposi(ball) == -2){
 					// Enc3 = Enc1;
-					pid_speed(Enc1, Enc3,ENC*(-0.5), SUM_pid_speed_turn_1, SUM_pid_speed_turn_3, &PWM1, &PWM3, last_ENC__1_2, last_ENC__1_3);
+					pid_speed(Enc1, Enc3, ENC * (-0.5), SUM_pid_speed_turn_1, SUM_pid_speed_turn_3, &PWM1, &PWM3, last_ENC__1_2, last_ENC__1_3);
 					PWM1 = PWM3;
 					PWM2 = PWM3;
 					turn_flag = -1;
@@ -245,20 +211,16 @@ int main(void) {
 				}
 			} else if (ball_status == 0) {
 				// Enc3 = Enc1;
-				pid_speed(Enc1, Enc3,ENC*(-0.5), SUM_pid_speed_turn_1, SUM_pid_speed_turn_3, &PWM1, &PWM3, last_ENC__1_2, last_ENC__1_3);
+				pid_speed(Enc1, Enc3, ENC * (-0.5), SUM_pid_speed_turn_1, SUM_pid_speed_turn_3, &PWM1, &PWM3, last_ENC__1_2, last_ENC__1_3);
 				PWM1 = PWM3;
 				PWM2 = PWM3;
 				turn_flag = -1;
 				search_time = 0;
 				clear_array(SUM_pid_speed_1, 50);
 				clear_array(SUM_pid_speed_3, 50);
-			} else {
-				PWM1 = 0;
-				PWM2 = 0;
-				PWM3 = 0;
-			}
+			} 
 		} else if (state == 10) {
-			if (ball > 45) {
+			if (Judgeballposi(ball) >= 1) {
 				// Enc3 = Enc1;
 				pid_speed(Enc1, Enc3,0.5 * ENC, SUM_pid_speed_turn_1, SUM_pid_speed_turn_3, &PWM1, &PWM3, last_ENC__1_2, last_ENC__1_3);
 				PWM1 = PWM3;
@@ -267,7 +229,7 @@ int main(void) {
 				search_time = 0;
 				clear_array(SUM_pid_speed_1, 50);
 				clear_array(SUM_pid_speed_3, 50);
-			} else if ( ball < 35 && ball >= 0) {
+			} else if (Judgeballposi(ball) <= -1) {
 				// Enc3 = Enc1;
 				pid_speed(Enc1, Enc3,ENC*(-0.5), SUM_pid_speed_turn_1, SUM_pid_speed_turn_3, &PWM1, &PWM3, last_ENC__1_2, last_ENC__1_3);
 				PWM1 = PWM3;
