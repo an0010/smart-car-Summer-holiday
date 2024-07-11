@@ -102,7 +102,7 @@ def search_gate(img):
 
 def search_ball(img):
     blobs = img.find_blobs(
-        threshold_list_ball,invert=True ,pixels_threshold=100, area_threshold=100, merge=True)
+        threshold_list_ball,invert=True ,pixels_threshold=10, area_threshold=10, merge=True)
     if blobs:
         max_blob = blobs[0]
         for blob in blobs:
@@ -122,13 +122,13 @@ def search_ball(img):
 
             #whether the ball is too close
             if max_blob.area()>2000:
-                ball_dis_flag = 1
+                ball_dis_flag = 2
             else :
-                ball_dis_flag = 0
+                ball_dis_flag = 1
             return x, ball_dis_flag
 
         # case 2: ball is near so it is not round
-        elif max_blob.area()>9000:
+        elif max_blob.area()>4000:
             circle_tuple = max_blob.enclosing_circle()
 #            img.draw_circle(circle_tuple)
             x = circle_tuple[0] #0~165
@@ -138,19 +138,19 @@ def search_ball(img):
 
             #whether the ball is too close
             if max_blob.area()>2000:
-                ball_dis_flag = 1
+                ball_dis_flag = 2
             else :
-                ball_dis_flag = 0
+                ball_dis_flag = 1
             return x, ball_dis_flag
         # case 3: there is no ball but there is a blob
         else:
             # print(200)
-            return 200, 3
+            return 200, 0
 
     # case 4: there is no ball and no blob
     else:
         # print(200)
-        return 200, 3
+        return 200, 0
 
 def search_AprilTag(img):
     for tag in img.find_apriltags(
