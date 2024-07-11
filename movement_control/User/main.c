@@ -12,6 +12,10 @@
 #include "hcsr04_driver.h"
 #include "pid.h"
 
+int32_t receive_ball_cx;
+int32_t receive_gate_cx;
+int32_t receive_ball_dis_flag;
+
 void clear_array(int32_t* array, int32_t length) {
 	int i = 0;
 	for (i = 0; i < length; i++) {
@@ -174,6 +178,10 @@ int main(void) {
 		Enc1 = ENC_Read(ENCODER1_TIMER);
 		Enc2 = ENC_Read(ENCODER2_TIMER);
 		Enc3 = ENC_Read(ENCODER3_TIMER);
+
+		ball = receive_ball_cx;
+		gate = receive_gate_cx;
+		ball_status = receive_ball_dis_flag;
 
 		UpdatePosi(&ball, &gate, &ball_status, Test_UASRT2());
 

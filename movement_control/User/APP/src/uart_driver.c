@@ -11,28 +11,28 @@
 
 
 
-uint8_t transmitter_buffer1[] = "HELLOWORLD";//¶¨Òå·¢ËÍÊý×é
-uint8_t receiver_buffer1[32];//¶¨Òå½ÓÊÕÊý×é
+uint8_t transmitter_buffer1[] = "HELLOWORLD";//ï¿½ï¿½ï¿½å·¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+uint8_t receiver_buffer1[32];//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 #define ARRAYNUM1(arr_nanme)      (uint32_t)(sizeof(arr_nanme) / sizeof(*(arr_nanme)))
-#define TRANSMIT_SIZE1   (ARRAYNUM1(transmitter_buffer1) - 1)//¼ÆËã´óÐ¡
+#define TRANSMIT_SIZE1   (ARRAYNUM1(transmitter_buffer1) - 1)//ï¿½ï¿½ï¿½ï¿½ï¿½Ð¡
 uint8_t transfersize1 = TRANSMIT_SIZE1;
 
-uint8_t receivesize1 = 10;    //½ÓÊÕ
+uint8_t receivesize1 = 10;    //ï¿½ï¿½ï¿½ï¿½
 __IO uint8_t  txcount1 = 0; 
 __IO uint16_t rxcount1 = 0; 
 
 //-------------------------------------------------------------------------------------
 
- uint8_t  USART_Rx_Buf[USART_RECV_BUF_SIZE];  // ÓÃÓÚ±£´æ RX ½ÓÊÕµ½µÄÊý¾Ý
- uint16_t USART_Rx_Len = 0;                   // ÓÃÓÚ±£´æ RX ½ÓÊÕµ½µÄÊý¾ÝµÄ¸öÊý
- uint16_t USART_Rx_Count = 0;                 // ÓÃÓÚ±£´æ RX ½ÓÊÕÊý¾ÝÊ±ÒÑ¾­½ÓÊÕµ½µÄÊý¾Ý¸öÊý
- uint8_t  USART_Tx_Buf[USART_SEND_BUF_SIZE];  // ÓÃÓÚ±£´æ Tx Òª·¢ËÍµÄÊý¾Ý
- uint16_t USART_Tx_Len = 0;                   // ÓÃÓÚ±£´æ Tx Òª·¢ËÍµÄÊý¾ÝµÄ¸öÊý
- uint16_t USART_Tx_Count = 0;                 // ÓÃÓÚ±£´æ Tx Òª·¢ËÍµÄÊý¾ÝÊ±ÒÑ¾­·¢ËÍµÄÊý¾Ý¸öÊý
+ uint8_t  USART_Rx_Buf[USART_RECV_BUF_SIZE];  // ï¿½ï¿½ï¿½Ú±ï¿½ï¿½ï¿½ RX ï¿½ï¿½ï¿½Õµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+ uint16_t USART_Rx_Len = 0;                   // ï¿½ï¿½ï¿½Ú±ï¿½ï¿½ï¿½ RX ï¿½ï¿½ï¿½Õµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÝµÄ¸ï¿½ï¿½ï¿½
+ uint16_t USART_Rx_Count = 0;                 // ï¿½ï¿½ï¿½Ú±ï¿½ï¿½ï¿½ RX ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½Õµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý¸ï¿½ï¿½ï¿½
+ uint8_t  USART_Tx_Buf[USART_SEND_BUF_SIZE];  // ï¿½ï¿½ï¿½Ú±ï¿½ï¿½ï¿½ Tx Òªï¿½ï¿½ï¿½Íµï¿½ï¿½ï¿½ï¿½ï¿½
+ uint16_t USART_Tx_Len = 0;                   // ï¿½ï¿½ï¿½Ú±ï¿½ï¿½ï¿½ Tx Òªï¿½ï¿½ï¿½Íµï¿½ï¿½ï¿½ï¿½ÝµÄ¸ï¿½ï¿½ï¿½
+ uint16_t USART_Tx_Count = 0;                 // ï¿½ï¿½ï¿½Ú±ï¿½ï¿½ï¿½ Tx Òªï¿½ï¿½ï¿½Íµï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½Íµï¿½ï¿½ï¿½ï¿½Ý¸ï¿½ï¿½ï¿½
 
 
 /**
-  * @brief ÖØ¶¨Ïòc¿âº¯Êýprintfµ½USART1
+  * @brief ï¿½Ø¶ï¿½ï¿½ï¿½cï¿½âº¯ï¿½ï¿½printfï¿½ï¿½USART1
   * @retval None
   */
 int fputc(int ch,FILE *p)  
@@ -43,7 +43,7 @@ int fputc(int ch,FILE *p)
 }
 
 /**
-  * @brief ÖØ¶¨Ïòc¿âº¯Êýgetchar,scanfµ½USART2
+  * @brief ï¿½Ø¶ï¿½ï¿½ï¿½cï¿½âº¯ï¿½ï¿½getchar,scanfï¿½ï¿½USART2
   * @retval None
   */
 int fgetc(FILE *f)
@@ -55,18 +55,18 @@ int fgetc(FILE *f)
 
 
 /********************************************************************
-* º¯ÊýÃû£ºvoid UART1_init(void)
-* ²Î  Êý: uint32_t Baud_rate  ²¨ÌØÂÊ
-* µ÷  ÓÃ£ºUSART1_Init(115200);
-* USART1³õÊ¼»¯£¬Ê¹ÓÃPA2(TX),PA3(RX)½Å£¬115200²¨ÌØÂÊ£¬ÎÞÐ£Ñé£¬8Î»Êý¾Ý£¬1Î»Í£Ö¹
+* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½void UART1_init(void)
+* ï¿½ï¿½  ï¿½ï¿½: uint32_t Baud_rate  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+* ï¿½ï¿½  ï¿½Ã£ï¿½USART1_Init(115200);
+* USART1ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½ï¿½PA2(TX),PA3(RX)ï¿½Å£ï¿½115200ï¿½ï¿½ï¿½ï¿½ï¿½Ê£ï¿½ï¿½ï¿½Ð£ï¿½é£¬8Î»ï¿½ï¿½ï¿½Ý£ï¿½1Î»Í£Ö¹
 ********************************************************************/
 void USART1_Init(uint32_t Baud_rate)
 {
-    rcu_periph_clock_enable(RCU_GPIOA);//Ê¹ÄÜGPIOAÊ±ÖÓ
-    rcu_periph_clock_enable(RCU_USART1);//Ê¹ÄÜUSART1Ê±ÖÓ
+    rcu_periph_clock_enable(RCU_GPIOA);//Ê¹ï¿½ï¿½GPIOAÊ±ï¿½ï¿½
+    rcu_periph_clock_enable(RCU_USART1);//Ê¹ï¿½ï¿½USART1Ê±ï¿½ï¿½
 
-    gpio_init(GPIOA, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ,GPIO_PIN_2);        //PA2  TXÊä³ö
-    gpio_init(GPIOA, GPIO_MODE_IN_FLOATING, GPIO_OSPEED_50MHZ,GPIO_PIN_3);  //PA3  RXÊäÈë
+    gpio_init(GPIOA, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ,GPIO_PIN_2);        //PA2  TXï¿½ï¿½ï¿½
+    gpio_init(GPIOA, GPIO_MODE_IN_FLOATING, GPIO_OSPEED_50MHZ,GPIO_PIN_3);  //PA3  RXï¿½ï¿½ï¿½ï¿½
     /* USART configure */
     usart_deinit(USART1);
     usart_baudrate_set(USART1,Baud_rate);
@@ -77,24 +77,24 @@ void USART1_Init(uint32_t Baud_rate)
     usart_hardware_flow_cts_config(USART1, USART_CTS_DISABLE);
     usart_transmit_config(USART1, USART_TRANSMIT_ENABLE);
     usart_receive_config(USART1, USART_RECEIVE_ENABLE);
-    usart_enable(USART1);//Ê¹ÄÜUSART1	
+    usart_enable(USART1);//Ê¹ï¿½ï¿½USART1	
     
-    nvic_irq_enable(USART1_IRQn, 0, 1);             //Ê¹ÄÜUSART1ÖÐ¶Ï
-	usart_interrupt_enable(USART1, USART_INT_RBNE); //½ÓÊÕÖÐ¶Ï´ò¿ª
+    nvic_irq_enable(USART1_IRQn, 0, 1);             //Ê¹ï¿½ï¿½USART1ï¿½Ð¶ï¿½
+	usart_interrupt_enable(USART1, USART_INT_RBNE); //ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶Ï´ï¿½
 }
 /********************************************************************
-* º¯ÊýÃû£ºvoid UART2_init(void)
-* ²Î  Êý: uint32_t Baud_rate  ²¨ÌØÂÊ
-* µ÷  ÓÃ£ºUSART2_Init(115200);
-* USART2³õÊ¼»¯£¬Ê¹ÓÃPB10(TX),PB11(RX)½Å£¬115200²¨ÌØÂÊ£¬ÎÞÐ£Ñé£¬8Î»Êý¾Ý£¬1Î»Í£Ö¹
+* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½void UART2_init(void)
+* ï¿½ï¿½  ï¿½ï¿½: uint32_t Baud_rate  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+* ï¿½ï¿½  ï¿½Ã£ï¿½USART2_Init(115200);
+* USART2ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½ï¿½PB10(TX),PB11(RX)ï¿½Å£ï¿½115200ï¿½ï¿½ï¿½ï¿½ï¿½Ê£ï¿½ï¿½ï¿½Ð£ï¿½é£¬8Î»ï¿½ï¿½ï¿½Ý£ï¿½1Î»Í£Ö¹
 ********************************************************************/
 void USART2_Init(uint32_t Baud_rate)
 {
-    rcu_periph_clock_enable(RCU_GPIOB);//Ê¹ÄÜGPIOAÊ±ÖÓ
-    rcu_periph_clock_enable(RCU_USART2);//Ê¹ÄÜUSART1Ê±ÖÓ
+    rcu_periph_clock_enable(RCU_GPIOB);//Ê¹ï¿½ï¿½GPIOAÊ±ï¿½ï¿½
+    rcu_periph_clock_enable(RCU_USART2);//Ê¹ï¿½ï¿½USART1Ê±ï¿½ï¿½
 
-    gpio_init(GPIOB, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ,GPIO_PIN_10);        //PB10  TXÊä³ö
-    gpio_init(GPIOB, GPIO_MODE_IN_FLOATING, GPIO_OSPEED_50MHZ,GPIO_PIN_11);  //PB11  RXÊäÈë
+    gpio_init(GPIOB, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ,GPIO_PIN_10);        //PB10  TXï¿½ï¿½ï¿½
+    gpio_init(GPIOB, GPIO_MODE_IN_FLOATING, GPIO_OSPEED_50MHZ,GPIO_PIN_11);  //PB11  RXï¿½ï¿½ï¿½ï¿½
     /* USART configure */
     usart_deinit(USART2);
     usart_baudrate_set(USART2,Baud_rate);
@@ -105,22 +105,22 @@ void USART2_Init(uint32_t Baud_rate)
     usart_hardware_flow_cts_config(USART2, USART_CTS_DISABLE);
     usart_transmit_config(USART2, USART_TRANSMIT_ENABLE);
     usart_receive_config(USART2, USART_RECEIVE_ENABLE);
-    usart_enable(USART2);//Ê¹ÄÜUSART2
+    usart_enable(USART2);//Ê¹ï¿½ï¿½USART2
     
-    nvic_irq_enable(USART2_IRQn, 0, 0);             //Ê¹ÄÜUSART2ÖÐ¶Ï£¬ÇÀÕ¼ÓÅÏÈ¼¶ºÍ´ÎÓÅÏÈ¼¶£¬Ô½Ð¡Ô½¸ß
-		usart_interrupt_enable(USART2, USART_INT_RBNE); //ÊÕ·¢ÖÐ¶Ï´ò¿ª
+    nvic_irq_enable(USART2_IRQn, 0, 0);             //Ê¹ï¿½ï¿½USART2ï¿½Ð¶Ï£ï¿½ï¿½ï¿½Õ¼ï¿½ï¿½ï¿½È¼ï¿½ï¿½Í´ï¿½ï¿½ï¿½ï¿½È¼ï¿½ï¿½ï¿½Ô½Ð¡Ô½ï¿½ï¿½
+		usart_interrupt_enable(USART2, USART_INT_RBNE); //ï¿½Õ·ï¿½ï¿½Ð¶Ï´ï¿½
 }
 
 
 
 void USART_Sent_Byte(uint32_t usart_periph,uint8_t byte)
 {
-    usart_data_transmit(USART2, byte);	    					//Í¨¹ýUSART2·¢ËÍ
-    while(RESET == usart_flag_get(USART2, USART_FLAG_TBE));		//ÅÐ¶Ï»º³åÇøÊÇ·ñÒÑ¾­¿ÕÁË
+    usart_data_transmit(USART2, byte);	    					//Í¨ï¿½ï¿½USART2ï¿½ï¿½ï¿½ï¿½
+    while(RESET == usart_flag_get(USART2, USART_FLAG_TBE));		//ï¿½Ð¶Ï»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½ï¿½
 }
 
 
-//²âÊÔÎªÍ¨¹ý
+//ï¿½ï¿½ï¿½ï¿½ÎªÍ¨ï¿½ï¿½
 void USART_Sent_Data(uint32_t usart_periph ,uint8_t *data)
 {
     uint32_t len;
@@ -128,7 +128,7 @@ void USART_Sent_Data(uint32_t usart_periph ,uint8_t *data)
     while(data && len)
 	{
 		USART_Sent_Byte(usart_periph,*data);
-		data++;		//Ö¸ÕëÍùºóÒÆÒ»Î»
+		data++;		//Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»Î»
         len--;
 	}
 }
@@ -138,7 +138,7 @@ void USART_Sent_String(uint32_t usart_periph,char *str)
 	while(str && (*str))
      {
 		USART_Sent_Byte(usart_periph,(uint8_t)*str);
-		str++;		// Ö¸ÕëÍùÏÂÒ»¸öÒÆ¶¯
+		str++;		// Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½Æ¶ï¿½
      }
 }
 
@@ -146,38 +146,37 @@ void USART_Sent_String(uint32_t usart_periph,char *str)
 
 void Test_UASRT1(void)
 {
-	//USARTÏà¹ØÅäÖÃ
-	USART1_Init(115200);                //³õÊ¼ºúUSART 115200 Ê¹ÄÜ ²¢¿ªÆô´®¿ÚÖÐ¶Ï½ÓÊÜ
-	USART2_Init(115200);                //³õÊ¼ºúUSART 115200 Ê¹ÄÜ ²¢¿ªÆô´®¿ÚÖÐ¶Ï½ÓÊÜ
+	//USARTï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	USART1_Init(115200);                //ï¿½ï¿½Ê¼ï¿½ï¿½USART 115200 Ê¹ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶Ï½ï¿½ï¿½ï¿½
+	USART2_Init(115200);                //ï¿½ï¿½Ê¼ï¿½ï¿½USART 115200 Ê¹ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶Ï½ï¿½ï¿½ï¿½
 
-  OLED_Init();                         // OLED³õÊ¼»¯
-  OLED_P6x8Str(10, 0,"Test USART1");  // ×Ö·û´®
+  OLED_Init();                         // OLEDï¿½ï¿½Ê¼ï¿½ï¿½
+  OLED_P6x8Str(10, 0,"Test USART1");  // ï¿½Ö·ï¿½ï¿½ï¿½
 	delay_1ms(50);
 	printf(" USART1 Init ok \n");
 	
 	while(1)
 	{
-		if(rxcount1 >= receivesize1)//½ÓÊÕÂú10¸ö×Ö½Ú£¬ÔÚUSART0_IRQHandlerº¯ÊýÖÐ¼ÆÊý
+		if(rxcount1 >= receivesize1)//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½10ï¿½ï¿½ï¿½Ö½Ú£ï¿½ï¿½ï¿½USART0_IRQHandlerï¿½ï¿½ï¿½ï¿½ï¿½Ð¼ï¿½ï¿½ï¿½
 		{
 			rxcount1=0;
 			txcount1=0;
-			usart_interrupt_enable(USART1, USART_INT_TBE);//·¢ËÍÖÐ¶Ï´ò¿ª
-			while(txcount1 < transfersize1);//µÈ´ý·¢ËÍÍê³É£¬ÔÚUSART0_IRQHandlerº¯ÊýÖÐ¼ÆÊý
-			while (RESET == usart_flag_get(USART1, USART_FLAG_TC));//·¢ËÍÍê³ÉÅÐ¶Ï
-			usart_interrupt_enable(USART1, USART_INT_RBNE);//½ÓÊÕÖÐ¶Ï´ò¿ª
+			usart_interrupt_enable(USART1, USART_INT_TBE);//ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶Ï´ï¿½
+			while(txcount1 < transfersize1);//ï¿½È´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É£ï¿½ï¿½ï¿½USART0_IRQHandlerï¿½ï¿½ï¿½ï¿½ï¿½Ð¼ï¿½ï¿½ï¿½
+			while (RESET == usart_flag_get(USART1, USART_FLAG_TC));//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½
+			usart_interrupt_enable(USART1, USART_INT_RBNE);//ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶Ï´ï¿½
 			printf("\nReceive1 OK \n");
 		}
 	}
 }
 
-int32_t receive_data;
 int32_t Test_UASRT2(void)
 {
    
 	// printf("USART2 Init OK \n");
   	// USART_Sent_String(USART2,"USART2 Init OK\n");
 
-  return receive_data;
+  return 0;
 	
 }
 

@@ -154,16 +154,43 @@ extern uint8_t USART_Rx_Buf[];  // ??????? RX ???????????
 extern uint16_t USART_Rx_Len;   // ??????? RX ???????????????
 extern uint16_t USART_Rx_Count; // ??????? RX ??????????????????????????
 
-/* ????2?L???????????ÿ????h????????????h????? */
-extern int32_t receive_data;
+/* ????2?L???????????ï¿½????h????????????h????? */
+int32_t receive_data[6];
+extern int32_t receive_ball_cx;
+extern int32_t receive_gate_cx;
+extern int32_t receive_ball_dis_flag;
+
 void USART2_IRQHandler(void)
 {
+    const int32_t first_receive_data = 255;
+    const int32_t second_receive_data = 253;
+    const int32_t last_receive_data = 254;
+
+    static int32_t receive_index = 0;
+    static int32_t receive_flag = 0;
     // Test RX&TX OK!
     if (RESET != usart_interrupt_flag_get(USART2, USART_INT_FLAG_RBNE))
-    {
-        receive_data = usart_data_receive(USART2);	//????????
-        //??h????h??
-        usart_data_transmit(USART2, (int32_t)receive_data);		//????????
-        while (RESET == usart_flag_get(USART2, USART_FLAG_TBE)); // ??????????
+    {   
+        receive_data[receive_index] = usart_data_receive(USART2);
+        receive_index++;
+        if(receive_data[0] != first_receive_data){
+            receive_index = 0;
+        }
+        if(receive_data[1] != second_receive_data && receive_index == 2){
+            receive_index = 0;
+        }
+        if(receive_index == 6){
+            if(receive_data[5] == last_receive_data){
+                receive_ball_cx = receive_data[2];
+                receive_gate_cx = receive_data[3];
+                receive_ball_dis_flag = receive_data[4];
+                receive_index = 0;
+            }
+        }
+        
+
+       
+        // usart_data_transmit(USART2, (int32_t)receive_data);
+        // while (RESET == usart_flag_get(USART2, USART_FLAG_TBE));
     }
 }

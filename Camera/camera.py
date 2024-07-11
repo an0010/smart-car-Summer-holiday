@@ -66,6 +66,7 @@ ball_cx = 0
 gate_cx = 0
 AprilTag_cx = 0
 AprilTag_distance = 0
+ball_dis_flag = 0
 
 
 def family_name(tag):
@@ -92,13 +93,12 @@ def search_gate(img):
                 max_blob = blob
         rect_tuple = max_blob.rect()
         img.draw_rectangle(rect_tuple)
-        x = max_blob.cx()
-        x = int(x/(165/100))
+        x = max_blob.cx() #0~165
         # print("rect_x:", x)
         return x
     else:
-        print(100)
-        return 100
+        print(200)
+        return 200
 
 def search_ball(img):
     blobs = img.find_blobs(
@@ -115,38 +115,42 @@ def search_ball(img):
         if max_blob.roundness()>0.60:
             circle_tuple = max_blob.enclosing_circle()
             img.draw_circle(circle_tuple)
-            x = int(circle_tuple[0]/(165/50) + 100)
+            x = circle_tuple[0] #0~165
             # print("circ_roundness", max_blob.roundness())
             # print("circ_area", max_blob.area())
 #            print("circ_x:", x)
 
             #whether the ball is too close
             if max_blob.area()>7000:
-                x = x + 50
-            return x
+                ball_dis_flag = 1
+            else :
+                ball_dis_flag = 0
+            return x, ball_dis_flag
 
         # case 2: ball is near so it is not round
         elif max_blob.area()>25000:
             circle_tuple = max_blob.enclosing_circle()
             img.draw_circle(circle_tuple)
-            x = int(circle_tuple[0]/(165/100) + 100)
+            x = circle_tuple[0] #0~165
 #            print("circ_roundness", max_blob.roundness())
 #            print("circ_area", max_blob.area())
 #            print("circ_x:", x)
 
             #whether the ball is too close
             if max_blob.area()>7000:
-                x = x+50
-            return x
+                ball_dis_flag = 1
+            else :
+                ball_dis_flag = 0
+            return x, ball_dis_flag
         # case 3: there is no ball but there is a blob
         else:
             # print(200)
-            return 200
+            return 200, 3
 
     # case 4: there is no ball and no blob
     else:
         # print(200)
-        return 200
+        return 200, 3
 
 def search_AprilTag(img):
     for tag in img.find_apriltags(
@@ -169,7 +173,10 @@ if __name__ == "__main__":
         if Apriltag_output:
             AprilTag_cx = Apriltag_output[0]
             AprilTag_distance = Apriltag_output[1]
-        ball_x = search_ball(img)
+        ball_output = search_ball(img)
+        if ball_output:
+            ball_x = ball_output[0]
+            ball_dis_flag = ball_output[1]
         gate_x = search_gate(img)
 
         uart.writechar(255) # start byte
@@ -178,5 +185,5 @@ if __name__ == "__main__":
         print("ball_cx:", ball_x)
         uart.writechar(gate_x) # 0-100: gate position, 100: no gate
         print("gate_cx:", gate_x)
-        uart.writechar(ball_cx)
+        uart.writechar(ball_dis_flag) # 0: ball is far, 1: ball is near, 3: no ball
         uart.writechar(254)
