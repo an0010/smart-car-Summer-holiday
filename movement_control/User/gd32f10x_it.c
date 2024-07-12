@@ -159,6 +159,7 @@ int32_t receive_data[6];
 extern int32_t receive_ball_cx;
 extern int32_t receive_gate_cx;
 extern int32_t receive_ball_dis_flag;
+extern int32_t receive_gate_dis_flag;
 
 void USART2_IRQHandler(void)
 {
@@ -179,11 +180,13 @@ void USART2_IRQHandler(void)
         if(receive_data[1] != second_receive_data && receive_index == 2){
             receive_index = 0;
         }
-        if(receive_index == 6){
-            if(receive_data[5] == last_receive_data){
+        // 若增加数据帧长度，修改这里的7和6
+        if(receive_index == 7){
+            if(receive_data[6] == last_receive_data){
                 receive_ball_cx = receive_data[2];
                 receive_gate_cx = receive_data[3];
                 receive_ball_dis_flag = receive_data[4];
+                receive_gate_dis_flag = receive_data[5];
                 receive_index = 0;
             }
         }

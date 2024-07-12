@@ -15,6 +15,7 @@
 int32_t receive_ball_cx;
 int32_t receive_gate_cx;
 int32_t receive_ball_dis_flag;
+int32_t receive_gate_dis_flag;
 
 void clear_array(int32_t* array, int32_t length) {
 	int i = 0;
@@ -173,11 +174,12 @@ int main(void) {
 
 	uint8_t sensor_Value[4];
 
+	int32_t last_ENC__1_1 = 0;
 	int32_t last_ENC__1_2 = 0;
 	int32_t last_ENC__1_3 = 0;
 
-	int32_t turnballflag = 0;
-	int32_t turngateflag = 0;
+	int32_t turnballflag = 1;
+	int32_t turngateflag = 1;
 
 	int32_t search_time = 0;
 	int counter = 0;
@@ -210,80 +212,27 @@ int main(void) {
 		//flag为1：向右转
 
 		if (state == 1) {
-			// if (Judgeballposi(ball) == 0){
-			// 	// Enc3 = -Enc1;
-			// 	pid_speed(Enc1, Enc3, ENC, SUM_pid_speed_1, SUM_pid_speed_3, &PWM1, &PWM3, last_ENC__1_2, last_ENC__1_3);
-			// 	PWM2 = 0;
-			// 	clear_array(SUM_pid_speed_turn_1, 50);
-			// 	clear_array(SUM_pid_speed_turn_3, 50);
-			// } else if (Judgeballposi(ball) == 1) {
-			// 	// Enc3 = -Enc1;
-			// 	pid_speed_both_ENC(Enc1, Enc3, ENC, ENC + 3, SUM_pid_speed_1, SUM_pid_speed_3, &PWM1, &PWM3, last_ENC__1_2, last_ENC__1_3);
-			// 	PWM2 = 0;
-			// 	clear_array(SUM_pid_speed_turn_1, 50);
-			// 	clear_array(SUM_pid_speed_turn_3, 50);
-			// } else if (Judgeballposi(ball) == 2) {
-			// 	// Enc3 = Enc1;
-			// 	pid_speed(Enc1, Enc3,ENC * 0.5, SUM_pid_speed_turn_1, SUM_pid_speed_turn_3, &PWM1, &PWM3, last_ENC__1_2, last_ENC__1_3);
-			// 	PWM1 = PWM3;
-			// 	PWM2 = PWM3;
-			// 	clear_array(SUM_pid_speed_1, 50);
-			// 	clear_array(SUM_pid_speed_3, 50);
-			// } else if (Judgeballposi(ball) == -1) {
-			// 	// Enc3 = -Enc1;
-			// 	pid_speed_both_ENC(Enc1, Enc3, ENC + 3, ENC, SUM_pid_speed_1, SUM_pid_speed_3, &PWM1, &PWM3, last_ENC__1_2, last_ENC__1_3);
-			// 	PWM2 = 0;
-			// 	clear_array(SUM_pid_speed_turn_1, 50);
-			// 	clear_array(SUM_pid_speed_turn_3, 50);
-			// } else if (Judgeballposi(ball) == -2){
-			// 	// Enc3 = Enc1;
-			// 	pid_speed(Enc1, Enc3, ENC * (-0.5), SUM_pid_speed_turn_1, SUM_pid_speed_turn_3, &PWM1, &PWM3, last_ENC__1_2, last_ENC__1_3);
-			// 	PWM1 = PWM3;
-			// 	PWM2 = PWM3;
-			// 	clear_array(SUM_pid_speed_1, 50);
-			// 	clear_array(SUM_pid_speed_3, 50);
-			// }
 			Updateturnballflag(&turnballflag, ball);
-			pid_closing_ball(Enc1, Enc3, ENC * 1.5, SUM_pid_speed_1, SUM_pid_speed_3, &PWM1, &PWM3, last_ENC__1_2, last_ENC__1_3, ball);
+			Updateturngateflag(&turngateflag, gate);
+			pid_closing_ball(Enc1, Enc3, ENC * 1.5, SUM_pid_speed_1, SUM_pid_speed_3, &PWM1, &PWM3, &last_ENC__1_1, &last_ENC__1_3, ball);
 			PWM2 = 0;
 			clear_array(SUM_pid_speed_turn_1, 50);
 			clear_array(SUM_pid_speed_turn_3, 50);
 		} else if (state == 0) {
-			// Enc3 = Enc1;
-			// if (Judgeballposi(lastball) < 0) {
-			// 	turn_flag = -1;
-			// } else {
-			// 	turn_flag = 1;
-			// }
-			pid_speed(Enc1, Enc3, ENC * turnballflag * 0.4, SUM_pid_speed_turn_1, SUM_pid_speed_turn_3, &PWM1, &PWM3, last_ENC__1_2, last_ENC__1_3);
+			Updateturngateflag(&turngateflag, gate);
+			pid_speed(Enc1, Enc3, ENC * turnballflag * 0.4, SUM_pid_speed_turn_1, SUM_pid_speed_turn_3, &PWM1, &PWM3, &last_ENC__1_1, &last_ENC__1_3);
 			PWM1 = PWM3;
 			PWM2 = PWM3;
 			clear_array(SUM_pid_speed_1, 50);
 			clear_array(SUM_pid_speed_3, 50); 
 		} else if (state == 3) {
-			// if (Judgeballposi(ball) >= 1) {
-			// 	// Enc3 = Enc1;
-			// 	pid_speed(Enc1, Enc3, 0.5 * ENC, SUM_pid_speed_turn_1, SUM_pid_speed_turn_3, &PWM1, &PWM3, last_ENC__1_2, last_ENC__1_3);
-			// 	PWM1 = PWM3;
-			// 	PWM2 = PWM3;
-			// 	clear_array(SUM_pid_speed_1, 50);
-			// 	clear_array(SUM_pid_speed_3, 50);
-			// } else if (Judgeballposi(ball) <= -1) {
-			// 	// Enc3 = Enc1;
-			// 	pid_speed(Enc1, Enc3,ENC*(-0.5), SUM_pid_speed_turn_1, SUM_pid_speed_turn_3, &PWM1, &PWM3, last_ENC__1_2, last_ENC__1_3);
-			// 	PWM1 = PWM3;
-			// 	PWM2 = PWM3;
-			// 	clear_array(SUM_pid_speed_1, 50);
-			// 	clear_array(SUM_pid_speed_3, 50);
-			// }
 			Updateturnballflag(&turnballflag, ball);
-			pid_fine_turn_ball(Enc1, Enc3, SUM_pid_speed_turn_1, SUM_pid_speed_turn_3, &PWM1, &PWM3, last_ENC__1_2, last_ENC__1_3, ball);
+			Updateturngateflag(&turngateflag, gate);
+			pid_fine_turn_ball(&PWM1, &PWM3, ball);
 			PWM2 = 0;
 			clear_array(SUM_pid_speed_1, 50);
 			clear_array(SUM_pid_speed_3, 50);
 		} else if (state == 4) {
-			// Enc3 = Enc1;
-			// pid_speed(Enc1, Enc3,ENC*(-1), SUM_pid_speed_turn_1, SUM_pid_speed_turn_3, &PWM1, &PWM3, last_ENC__1_2, last_ENC__1_3);
 			Updateturnballflag(&turnballflag, ball);
 			PWM1 = 0;
 			PWM3 = 0;
@@ -291,22 +240,14 @@ int main(void) {
 			clear_array(SUM_pid_speed_1, 50);
 			clear_array(SUM_pid_speed_3, 50);
 		} else if (state == 2) {
-			// Enc3 = -Enc1;
-			// pid_speed(Enc1, Enc3, ENC, SUM_pid_speed_1, SUM_pid_speed_3, &PWM1, &PWM3, last_ENC__1_2, last_ENC__1_3);
-			// PWM2 = 0;
-			// clear_array(SUM_pid_speed_turn_1, 50);
-			// clear_array(SUM_pid_speed_turn_3, 50);
 			Updateturnballflag(&turnballflag, ball);
 			Updateturngateflag(&turngateflag, gate);
 			if (Judgegateposi(gate) == 0) {
-				pid_shot(Enc1, Enc3, ENC*1.5, SUM_pid_speed_1, SUM_pid_speed_3, &PWM1, &PWM3, last_ENC__1_2, last_ENC__1_3, 0);
+				pid_shot(Enc1, Enc3, ENC*1.5, SUM_pid_speed_1, SUM_pid_speed_3, &PWM1, &PWM3, &last_ENC__1_1, &last_ENC__1_3, 0);
 				PWM2 = 0;
-			} else if (Judgegateposi(gate) == -1) {
-
-			} else {
-				
+			} else if (Judgegateposi(gate) == -1 || Judgegateposi(gate) == 1) {
+				pid_speed_1_motor(Enc2,ENC*0.3*Judgegateposi(gate), &PWM2, &last_ENC__1_2);
 			}
-			
 			clear_array(SUM_pid_speed_turn_1, 50);
 			clear_array(SUM_pid_speed_turn_3, 50);
 		}
@@ -321,6 +262,6 @@ int main(void) {
 		OLED_P6x8Str(0, 6, txt); // �ַ���
 
 		led_toggle();
-		delay_1ms(20);
+		delay_1ms(2);
 	}
 }

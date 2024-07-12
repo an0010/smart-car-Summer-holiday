@@ -53,8 +53,10 @@ uart = UART(3, 115200)         # 初始化串口3，波特率115200 --》母板�
 
 ch = 0
 thresholds = [
-    (0, 100, -128, 42, -128, 127),
-    (21, 79, -56, -14, 33, 77),
+#    (0, 100, -128, 42, -128, 127),
+#    (21, 89, -56, 4, 33, 77),     #520房间阈值
+    (0, 100, -128, 29, -128, 127),
+    (21, 89, -56, 4, 33, 77),     #519房间阈值
 ]
 
 threshold_list_ball = []
@@ -67,6 +69,7 @@ gate_cx = 0
 AprilTag_cx = 0
 AprilTag_distance = 0
 ball_dis_flag = 0
+gate_dis_flag = 0
 
 
 def family_name(tag):
@@ -187,4 +190,6 @@ if __name__ == "__main__":
         print("gate_cx:", gate_x)
         uart.writechar(ball_dis_flag) # 0: no ball, 1: ball is far, 2: ball is near
         print("dis_flag:",ball_dis_flag)
+        uart.writechar(gate_dis_flag) # 0: no gate, 1: gate is far, 2: gate is near
+        print("dis_flag:",gate_dis_flag)
         uart.writechar(254)

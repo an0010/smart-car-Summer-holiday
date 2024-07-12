@@ -1,6 +1,6 @@
 #include "pid.h"
 
-void pid_speed(int32_t E2, int32_t E3, int32_t ENC, int32_t* SUM_pid_speed_2,int32_t* SUM_pid_speed_3, int32_t* PWM2, int32_t *PWM3, int32_t last_ENC__1_2, int32_t last_ENC__1_3){
+void pid_speed(int32_t E2, int32_t E3, int32_t ENC, int32_t* SUM_pid_speed_2,int32_t* SUM_pid_speed_3, int32_t* PWM2, int32_t *PWM3, int32_t *last_ENC__1_2, int32_t *last_ENC__1_3){
 
     const int register_num = 50;
     const float K = 10.0;
@@ -29,9 +29,9 @@ void pid_speed(int32_t E2, int32_t E3, int32_t ENC, int32_t* SUM_pid_speed_2,int
     sum_loss3 = queue_sum(SUM_pid_speed_3, register_num);
 
     int delta_2; 
-    delta_2 = E2 - last_ENC__1_2;
+    delta_2 = E2 - *last_ENC__1_2;
     int delta_3; 
-    delta_3 = E3 - last_ENC__1_3;
+    delta_3 = E3 - *last_ENC__1_3;
 
     pwm2 = lambda*ENC + lambda_p*loss2 +lambda_i*sum_loss2+lambda_d*delta_2;
     pwm3 = lambda*ENC + lambda_p*loss3 +lambda_i*sum_loss3+lambda_d*delta_3;
@@ -43,9 +43,49 @@ void pid_speed(int32_t E2, int32_t E3, int32_t ENC, int32_t* SUM_pid_speed_2,int
 
     *PWM2 = -pwm2;
     *PWM3 = pwm3;
+
+    *last_ENC__1_2 = E2;
+    *last_ENC__1_3 = E3;
 }
 
-void pid_speed_both_ENC(int32_t E2, int32_t E3, int32_t ENC_2,int32_t ENC_3 , int32_t* SUM_pid_speed_2,int32_t* SUM_pid_speed_3, int32_t* PWM2, int32_t *PWM3, int32_t last_ENC__1_2, int32_t last_ENC__1_3){
+void pid_speed_1_motor(int32_t E, int32_t ENC, int32_t* PWM, int32_t* last_ENC){
+
+    static int32_t SUM_pid_speed[50] = {0};
+
+    const int register_num = 50;
+    const float K = 10.0;
+    const float lambda = 20 * K;
+    const float lambda_p = 5 * K;
+    const float lambda_i = 1 * K;
+    const float lambda_d = 0.1 * K;
+
+    const int MAX_PWM = 3000;
+
+    int pwm;
+    pwm = *PWM;
+    
+    int loss;
+    loss = ENC - E;
+
+    int sum_loss;
+    
+    queue_push(SUM_pid_speed, loss, register_num);
+
+    sum_loss = queue_sum(SUM_pid_speed, register_num);
+
+    int delta; 
+    delta = E - *last_ENC;
+
+    pwm = lambda*ENC + lambda_p*loss +lambda_i*sum_loss+lambda_d*delta;
+
+    pwm = pwm>MAX_PWM?MAX_PWM:pwm;
+    pwm = pwm<-MAX_PWM?-MAX_PWM:pwm;
+
+    *PWM = pwm;
+    *last_ENC = E;
+}
+
+void pid_speed_both_ENC(int32_t E2, int32_t E3, int32_t ENC_2,int32_t ENC_3 , int32_t* SUM_pid_speed_2,int32_t* SUM_pid_speed_3, int32_t* PWM2, int32_t *PWM3, int32_t *last_ENC__1_2, int32_t *last_ENC__1_3){
     
         const int register_num = 50;
         const float K = 10.0;
@@ -74,9 +114,9 @@ void pid_speed_both_ENC(int32_t E2, int32_t E3, int32_t ENC_2,int32_t ENC_3 , in
         sum_loss3 = queue_sum(SUM_pid_speed_3, register_num);
     
         int delta_2; 
-        delta_2 = E2 - last_ENC__1_2;
+        delta_2 = E2 - *last_ENC__1_2;
         int delta_3; 
-        delta_3 = E3 - last_ENC__1_3;
+        delta_3 = E3 - *last_ENC__1_3;
     
         pwm2 = lambda*ENC_2 + lambda_p*loss2 +lambda_i*sum_loss2+lambda_d*delta_2;
         pwm3 = lambda*ENC_3 + lambda_p*loss3 +lambda_i*sum_loss3+lambda_d*delta_3;
@@ -88,12 +128,16 @@ void pid_speed_both_ENC(int32_t E2, int32_t E3, int32_t ENC_2,int32_t ENC_3 , in
     
         *PWM2 = -pwm2;
         *PWM3 = pwm3;
+
+        *last_ENC__1_2 = E2;
+        *last_ENC__1_3 = E3;
+
 }
 
 void pid_closing_ball(int32_t E2, int32_t E3, int32_t ENC, 
     int32_t* SUM_pid_speed_2,int32_t* SUM_pid_speed_3,
     int32_t* PWM2, int32_t *PWM3,
-    int32_t last_ENC__1_2, int32_t last_ENC__1_3,
+    int32_t *last_ENC__1_2, int32_t *last_ENC__1_3,
     int32_t ball_x){
     
         const int register_num = 50;
@@ -127,9 +171,9 @@ void pid_closing_ball(int32_t E2, int32_t E3, int32_t ENC,
         sum_loss3 = queue_sum(SUM_pid_speed_3, register_num);
     
         int delta_2; 
-        delta_2 = E2 - last_ENC__1_2;
+        delta_2 = E2 - *last_ENC__1_2;
         int delta_3; 
-        delta_3 = E3 - last_ENC__1_3;
+        delta_3 = E3 - *last_ENC__1_3;
     
         pwm2 = lambda*ENC + lambda_p*loss2 +lambda_i*sum_loss2+lambda_d*delta_2;
         pwm3 = lambda*ENC + lambda_p*loss3 +lambda_i*sum_loss3+lambda_d*delta_3;
@@ -141,12 +185,15 @@ void pid_closing_ball(int32_t E2, int32_t E3, int32_t ENC,
     
         *PWM2 = -pwm2;
         *PWM3 = pwm3;
+
+        *last_ENC__1_2 = E2;
+        *last_ENC__1_3 = E3;
 }
 
 void pid_shot(int32_t E2, int32_t E3, int32_t ENC, 
     int32_t* SUM_pid_speed_2,int32_t* SUM_pid_speed_3,
     int32_t* PWM2, int32_t *PWM3,
-    int32_t last_ENC__1_2, int32_t last_ENC__1_3,
+    int32_t *last_ENC__1_2, int32_t *last_ENC__1_3,
     int32_t bias){
     
         const int register_num = 50;
@@ -180,9 +227,9 @@ void pid_shot(int32_t E2, int32_t E3, int32_t ENC,
         sum_loss3 = queue_sum(SUM_pid_speed_3, register_num);
     
         int delta_2; 
-        delta_2 = E2 - last_ENC__1_2;
+        delta_2 = E2 - *last_ENC__1_2;
         int delta_3; 
-        delta_3 = E3 - last_ENC__1_3;
+        delta_3 = E3 - *last_ENC__1_3;
     
         pwm2 = lambda*ENC + lambda_p*loss2 +lambda_i*sum_loss2+lambda_d*delta_2;
         pwm3 = lambda*ENC + lambda_p*loss3 +lambda_i*sum_loss3+lambda_d*delta_3;
@@ -194,59 +241,52 @@ void pid_shot(int32_t E2, int32_t E3, int32_t ENC,
     
         *PWM2 = -pwm2;
         *PWM3 = pwm3;
+
+        *last_ENC__1_2 = E2;
+        *last_ENC__1_3 = E3;
 }
 
-void pid_fine_turn_ball(int32_t E2, int32_t E3,
-    int32_t* SUM_pid_speed_2,int32_t* SUM_pid_speed_3,
+void pid_fine_turn_ball(
     int32_t* PWM2, int32_t *PWM3,
-    int32_t last_ENC__1_2, int32_t last_ENC__1_3,
     int32_t ball_x){
     
+        static int32_t SUM_pid[50] = {0};
+        static int32_t last_PWM = 0;
+
         const int register_num = 50;
-        const float K = 10.0;
-        const float lambda = 0;
+        const float K = 0.5;
         const float lambda_p = 5 * K;
         const float lambda_i = 1 * K;
         const float lambda_d = 0.1 * K;
-        const float lambda_ball = 0.2;
     
         const int MAX_PWM = 3000;
     
-        int pwm2,pwm3;
-        pwm2 = *PWM2;
-        pwm3 = *PWM3;
+        int pwm;
+        pwm = (int)((*PWM2+*PWM3)/2);
         
-        int loss2,loss3;
-        int E2_goal,E3_goal;
-        E2 = -E2;
-        E2_goal = 0 - (ball_x-80)*lambda_ball;
-        E3_goal = 0 + (ball_x-80)*lambda_ball;
-        loss2 = E2_goal - E2;
-        loss3 = E3_goal - E3;
+        int loss;
+        loss = ball_x - 80;
     
-        int sum_loss2,sum_loss3;
+        int sum_loss;
         
-        queue_push(SUM_pid_speed_2, loss2, register_num);
-        queue_push(SUM_pid_speed_3, loss3, register_num);
+        queue_push(SUM_pid, loss, register_num);
     
-        sum_loss2 = queue_sum(SUM_pid_speed_2, register_num);
-        sum_loss3 = queue_sum(SUM_pid_speed_3, register_num);
+        sum_loss = queue_sum(SUM_pid, register_num);
+
+        pwm = lambda_p*loss +lambda_i*sum_loss;
     
-        int delta_2; 
-        delta_2 = E2 - last_ENC__1_2;
-        int delta_3; 
-        delta_3 = E3 - last_ENC__1_3;
+        int delta; 
+        delta = pwm - last_PWM;
+
+        pwm = pwm + lambda_d*delta;
     
-        pwm2 = lambda_p*loss2 +lambda_i*sum_loss2+lambda_d*delta_2;
-        pwm3 = lambda_p*loss3 +lambda_i*sum_loss3+lambda_d*delta_3;
+        pwm = pwm>MAX_PWM?MAX_PWM:pwm;
+        pwm = pwm<-MAX_PWM?-MAX_PWM:pwm;
     
-        pwm2 = pwm2>MAX_PWM?MAX_PWM:pwm2;
-        pwm3 = pwm3>MAX_PWM?MAX_PWM:pwm3;
-        pwm2 = pwm2<-MAX_PWM?-MAX_PWM:pwm2;
-        pwm3 = pwm3<-MAX_PWM?-MAX_PWM:pwm3;
-    
-        *PWM2 = -pwm2;
-        *PWM3 = pwm3;
+        *PWM2 = pwm;
+        *PWM3 = pwm;
+
+        last_PWM = pwm;
 }
 
 void queue_push(int32_t* queue, int32_t value, int32_t length){
