@@ -94,14 +94,19 @@ def search_gate(img):
         for blob in blobs:
             if blob.area()>max_blob.area():
                 max_blob = blob
-        rect_tuple = max_blob.rect()
+        # rect_tuple = max_blob.rect()
 #        img.draw_rectangle(rect_tuple)
         x = max_blob.cx() #0~165
+        if max_blob.area()>10000:
+            gate_dis_flag = 2
+        else :
+            gate_dis_flag = 1
         # print("rect_x:", x)
-        return x
+#        print("gate_area:",max_blob.area())
+        return x, gate_dis_flag
     else:
-        print(200)
-        return 200
+        # print(200)
+        return 200, 0
 
 def search_ball(img):
     blobs = img.find_blobs(
@@ -180,7 +185,10 @@ if __name__ == "__main__":
         if ball_output:
             ball_x = ball_output[0]
             ball_dis_flag = ball_output[1]
-        gate_x = search_gate(img)
+        gate_output = search_gate(img)
+        if gate_output:
+            gate_x = gate_output[0]
+            gate_dis_flag = gate_output[1]
 
         uart.writechar(255) # start byte
         uart.writechar(253)
