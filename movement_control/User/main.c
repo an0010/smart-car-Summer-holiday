@@ -80,8 +80,12 @@ void Updateturngateflag(int* pflag, int gate) {
 // 	}
 // }
 
-void UpdateState(int ball, int gate, int ball_status, int* pstate) {
+void UpdateState(int ball, int gate, int ball_status, int gate_status, int* pstate) {
     int currentstate = *pstate;
+	if (gate_status == 2) {
+		*pstate = 5;
+		return;
+	}
     if (currentstate == 0) {
 		if (ball_status == 1) {
 			*pstate = 1;
@@ -116,6 +120,18 @@ void UpdateState(int ball, int gate, int ball_status, int* pstate) {
 		} else {
 			if (Judgegateposi(gate) == -2 || Judgegateposi(gate) == 2) {
 				*pstate = 4;
+			}
+		}
+	} else if (currentstate == 5) {
+		if (ball_status == 0) {
+			*pstate = 0;
+		} else if (ball_status == 1) {
+			*pstate = 1;
+		} else if (ball_status == 2) {
+			if (Judgeballposi(ball) == 0) {
+				*pstate = 4;
+			} else {
+				*pstate = 3;
 			}
 		}
 	}
@@ -156,6 +172,7 @@ int main(void) {
 	int32_t ball = 0;        // Ball position
 	int32_t gate = 0;        // Gate position
 	int32_t ball_status = 0; // 0: not found; 1: found, not reached; 2: reached
+	int32_t gate_status = 0; // 0: not found; 1: found, not reached; 2: reached
 
 	int32_t Enc1 = 0; //front wheel
 	int32_t Enc2 = 0; //behind-right wheel
@@ -206,7 +223,7 @@ int main(void) {
 		gate = receive_gate_cx;
 		ball_status = receive_ball_dis_flag;
 
-		UpdateState(ball, gate, ball_status, &state);
+		UpdateState(ball, gate, ball_status, gate_status, &state);
 
 		//从左到右 1 0 2 3
 		//flag为1：向右转
@@ -250,6 +267,14 @@ int main(void) {
 			}
 			clear_array(SUM_pid_speed_turn_1, 50);
 			clear_array(SUM_pid_speed_turn_3, 50);
+		} else if (state == 5) {
+			// Updateturnballflag(&turnballflag, ball);
+			// Updateturngateflag(&turngateflag, gate);
+			// pid_speed(Enc1, Enc3, ENC * turnballflag * 0.4, SUM_pid_speed_turn_1, SUM_pid_speed_turn_3, &PWM1, &PWM3, &last_ENC__1_1, &last_ENC__1_3);
+			// PWM1 = PWM3;
+			// PWM2 = PWM3;
+			// clear_array(SUM_pid_speed_1, 50);
+			// clear_array(SUM_pid_speed_3, 50); 
 		}
 
 		MotorCtrl3W(PWM1, PWM2, PWM3);
