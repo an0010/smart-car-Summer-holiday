@@ -181,10 +181,10 @@ if __name__ == "__main__":
 
         uart.writechar(255) # start byte
         uart.writechar(253)
-        uart.writechar(ball_x) # 100-200: ball position, 100-150: ball is far, 150-200: ball is near, 200: no ball
+        uart.writechar(ball_x) # 0-165: ball position, 200: no ball
         print("ball_cx:", ball_x)
-        uart.writechar(gate_x) # 0-100: gate position, 100: no gate
+        uart.writechar(gate_x) # 0-165: gate position, 200: no gate
         print("gate_cx:", gate_x)
-        uart.writechar(ball_dis_flag) # 0: ball is far, 1: ball is near, 3: no ball
+        uart.writechar(ball_dis_flag) # 0: no ball, 1: ball is far, 2: ball is near
         print("dis_flag:",ball_dis_flag)
         uart.writechar(254)
