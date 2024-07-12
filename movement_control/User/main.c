@@ -283,7 +283,7 @@ int main(void) {
 			} else if(Judgeballposi(lastball) > 0){
 				turn_flag = 1;
 			}
-			pid_shot(Enc1, Enc3, ENC*1.5, SUM_pid_speed_1, SUM_pid_speed_3, &PWM1, &PWM3, last_ENC__1_2, last_ENC__1_3, ball-gate);
+			pid_shot(Enc1, Enc3, ENC*1.5, SUM_pid_speed_1, SUM_pid_speed_3, &PWM1, &PWM3, last_ENC__1_2, last_ENC__1_3, 0);
 			PWM2 = 0;
 			clear_array(SUM_pid_speed_turn_1, 50);
 			clear_array(SUM_pid_speed_turn_3, 50);
