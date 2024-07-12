@@ -178,6 +178,7 @@ int main(void) {
 	int32_t Enc2 = 0; //behind-right wheel
 	int32_t Enc3 = 0; //behind-left wheel
 	int32_t ENC = 0;  //goal speed
+	float Enc_float = 0;
 
 	int PWM1 = 0;
 	int PWM2 = 0;
@@ -205,10 +206,11 @@ int main(void) {
 
 	while (1) {
 
-		if (Read_key(KEY1) == 1) {ENC += 1;}
-		if (Read_key(KEY2) == 1) {ENC = 0;}
-		if (Read_key(KEY3) == 1) {ENC -= 1;}
+		if (Read_key(KEY1) == 1) {Enc_float += 0.1;}
+		if (Read_key(KEY2) == 1) {Enc_float = 0;}
+		if (Read_key(KEY3) == 1) {Enc_float -= 0.1;}
 		led_toggle();
+		ENC = (int)Enc_float;
 
 		// sensor_Value[0] = Read_sensor(sensor1);
 		// sensor_Value[1] = Read_sensor(sensor2);
@@ -222,6 +224,7 @@ int main(void) {
 		ball = receive_ball_cx;
 		gate = receive_gate_cx;
 		ball_status = receive_ball_dis_flag;
+		gate_status = receive_gate_dis_flag;
 
 		UpdateState(ball, gate, ball_status, gate_status, &state);
 
@@ -275,6 +278,9 @@ int main(void) {
 			// PWM2 = PWM3;
 			// clear_array(SUM_pid_speed_1, 50);
 			// clear_array(SUM_pid_speed_3, 50); 
+			PWM1 = 1000;
+			PWM2 = 0;
+			PWM3 = -1000;
 		}
 
 		MotorCtrl3W(PWM1, PWM2, PWM3);
