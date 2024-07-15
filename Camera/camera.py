@@ -129,10 +129,10 @@ def search_ball(img):
 #            print("circ_x:", x)
 
             #whether the ball is too close
-            if max_blob.area()>2000:
-                ball_dis_flag = 2
-            elif max_blob.area()>3000:
+            if max_blob.area()>3000:
                 ball_dis_flag = 3
+            elif max_blob.area()>2000:
+                ball_dis_flag = 2
             else :
                 ball_dis_flag = 1
             return x, ball_dis_flag
@@ -147,10 +147,10 @@ def search_ball(img):
 #            print("circ_x:", x)
 
             #whether the ball is too close
-            if max_blob.area()>2000:
-                ball_dis_flag = 2
-            elif max_blob.area()>3000:
+            if max_blob.area()>3000:
                 ball_dis_flag = 3
+            elif max_blob.area()>2000:
+                ball_dis_flag = 2
             else :
                 ball_dis_flag = 1
             return x, ball_dis_flag

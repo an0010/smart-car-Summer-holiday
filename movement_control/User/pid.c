@@ -142,11 +142,11 @@ void pid_closing_ball(int32_t E2, int32_t E3, int32_t ENC,
     
         const int register_num = 50;
         const float K = 10.0;
-        const float lambda = 20 * K;
+        const float lambda = 10 * K;
         const float lambda_p = 5 * K;
         const float lambda_i = 1 * K;
         const float lambda_d = 0.1 * K;
-        const float lambda_ball = 0.2;
+        const float lambda_ball = 0.5;
     
         const int MAX_PWM = 3000;
     
@@ -180,8 +180,8 @@ void pid_closing_ball(int32_t E2, int32_t E3, int32_t ENC,
     
         pwm2 = pwm2>MAX_PWM?MAX_PWM:pwm2;
         pwm3 = pwm3>MAX_PWM?MAX_PWM:pwm3;
-        pwm2 = pwm2<-MAX_PWM?-MAX_PWM:pwm2;
-        pwm3 = pwm3<-MAX_PWM?-MAX_PWM:pwm3;
+        pwm2 = pwm2<0?0:pwm2;
+        pwm3 = pwm3<0?0:pwm3;
     
         *PWM2 = -pwm2;
         *PWM3 = pwm3;
@@ -255,9 +255,9 @@ void pid_fine_turn_ball(
 
         const int register_num = 50;
         const float K = 0.5;
-        const float lambda_p = 5 * K;
-        const float lambda_i = 1 * K;
-        const float lambda_d = 0.1 * K;
+        const float lambda_p = 2 * K;
+        const float lambda_i = 0.0 * K;
+        const float lambda_d = 0 * K;
     
         const int MAX_PWM = 3000;
     

@@ -81,7 +81,7 @@ void UpdateState(int ball, int gate, int ball_status, int gate_status, int* psta
 	}
 
 	if (currentstate == 0) {
-		if (ball_status == 1) {
+		if (ball_status == 1 && (Judgeballposi(ball) == 1 || Judgeballposi(ball) == -1 || Judgeballposi(ball) == 0)) {
 			*pstate = 1;
 		} else if (ball_status == 2) {
 			*pstate = 3;
@@ -269,9 +269,9 @@ int main(void) {
 		} else if (state == 4) { // (very near ball) finding gate
 			Updateturnballflag(&turnballflag, ball);
 			
-			PWM1 = -1500;
+			PWM1 = -500;
 			PWM2 = 0;
-			PWM3 = 2000;
+			PWM3 = 1000;
 		} else if (state == 2) { // goaling
 			Updateturnballflag(&turnballflag, ball);
 			Updateturngateflag(&turngateflag, gate);
