@@ -129,16 +129,16 @@ def search_ball(img):
 #            print("circ_x:", x)
 
             #whether the ball is too close
-            if max_blob.area()>2000:
-                ball_dis_flag = 2
-            elif max_blob.area()>3000:
+            if max_blob.area()>7000:
                 ball_dis_flag = 3
+            elif max_blob.area()>4000:
+                ball_dis_flag = 2
             else :
                 ball_dis_flag = 1
             return x, ball_dis_flag
 
         # case 2: ball is near so it is not round
-        elif max_blob.area()>4000:
+        elif max_blob.area()>1000:
             circle_tuple = max_blob.enclosing_circle()
 #            img.draw_circle(circle_tuple)
             x = circle_tuple[0] #0~165
@@ -147,10 +147,10 @@ def search_ball(img):
 #            print("circ_x:", x)
 
             #whether the ball is too close
-            if max_blob.area()>2000:
-                ball_dis_flag = 2
-            elif max_blob.area()>3000:
+            if max_blob.area()>7000:
                 ball_dis_flag = 3
+            elif max_blob.area()>4000:
+                ball_dis_flag = 2
             else :
                 ball_dis_flag = 1
             return x, ball_dis_flag
@@ -199,9 +199,9 @@ if __name__ == "__main__":
         uart.writechar(ball_x) # 0-165: ball position, 200: no ball
         print("ball_cx:", ball_x)
         uart.writechar(gate_x) # 0-165: gate position, 200: no gate
-        print("gate_cx:", gate_x)
+#        print("gate_cx:", gate_x)
         uart.writechar(ball_dis_flag) # 0: no ball, 1: ball is far, 2: ball is near
         print("dis_flag:",ball_dis_flag)
         uart.writechar(gate_dis_flag) # 0: no gate, 1: gate is far, 2: gate is near
-        print("dis_flag:",gate_dis_flag)
+#        print("dis_flag:",gate_dis_flag)
         uart.writechar(254)
