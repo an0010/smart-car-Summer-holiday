@@ -246,24 +246,15 @@ int main(void) {
 			clear_array(SUM_pid_speed_turn_3, 50);
 		} else if (state == 0) { // circling around to find ball
 			Updateturngateflag(&turngateflag, gate);
-			pid_speed(Enc1, Enc3, ENC * turnballflag * 0.4, SUM_pid_speed_turn_1, SUM_pid_speed_turn_3, &PWM1, &PWM3, &last_ENC__1_1, &last_ENC__1_3);
-			PWM1 = PWM3;
-			PWM2 = PWM3;
-			clear_array(SUM_pid_speed_1, 50);
-			clear_array(SUM_pid_speed_3, 50); 
+			pid_speed_1_motor(Enc2, ENC * 0.3 * turnballflag, &PWM2, &last_ENC__1_2);
+			PWM1 = PWM2;
+			PWM3 = PWM2;
 		} else if (state == 3) { // (near ball) reaching ball, slow
-			// Updateturnballflag(&turnballflag, ball);
-			// Updateturngateflag(&turngateflag, gate);
-			// pid_fine_turn_ball(&PWM1, &PWM3, ball);
-			// PWM2 = 0;
-			// clear_array(SUM_pid_speed_1, 50);
-			// clear_array(SUM_pid_speed_3, 50);
 			Updateturnballflag(&turnballflag, ball);
 			Updateturngateflag(&turngateflag, gate);
-			// pid_closing_ball(Enc1, Enc3, ENC * 0.2, SUM_pid_speed_1, SUM_pid_speed_3, &PWM1, &PWM3, &last_ENC__1_1, &last_ENC__1_3, ball);
-			PWM1 = -1000;
-			PWM2 = 0;
-			PWM3 = 1000;
+			
+			pid_closing_ball_near(Enc1, Enc3, ENC * 1.0, &PWM1, &PWM3, ball);
+
 			clear_array(SUM_pid_speed_turn_1, 50);
 			clear_array(SUM_pid_speed_turn_3, 50);
 		} else if (state == 4) { // (very near ball) finding gate
@@ -293,8 +284,11 @@ int main(void) {
 
 		MotorCtrl3W(PWM1, PWM2, PWM3);
 
-		sprintf(txt, "ball: %d", ball);
+		sprintf(txt, "ENC: %d, %d, %d", Enc1, Enc2, Enc3);
 		OLED_P6x8Str(0, 2, txt); // �ַ���
+
+		// sprintf(txt, "ball: %d", ball);
+		// OLED_P6x8Str(0, 2, txt); // �ַ���
 		sprintf(txt, "gate: %d", gate);
 		OLED_P6x8Str(0, 4, txt); // �ַ���
 		sprintf(txt, "status: %d, %d", ball_status, state);
