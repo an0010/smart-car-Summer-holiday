@@ -53,10 +53,10 @@ uart = UART(3, 115200)         # 初始化串口3，波特率115200 --》母板�
 
 ch = 0
 thresholds = [
-#    (0, 100, -128, 42, -128, 127),
-#    (21, 89, -56, 4, 33, 77),     #520房间阈值
-    (0, 100, -128, 29, -128, 127),
-    (21, 89, -56, 4, 33, 77),     #519房间阈值
+    (0, 100, -128, 42, -128, 127),
+    (21, 89, -56, 4, 33, 77),     #520房间阈值
+#    (0, 100, -128, 29, -128, 127),
+#    (21, 89, -56, 4, 33, 77),     #519房间阈值
 ]
 
 threshold_list_ball = []
@@ -131,6 +131,8 @@ def search_ball(img):
             #whether the ball is too close
             if max_blob.area()>2000:
                 ball_dis_flag = 2
+            elif max_blob.area()>3000:
+                ball_dis_flag = 3
             else :
                 ball_dis_flag = 1
             return x, ball_dis_flag
@@ -147,6 +149,8 @@ def search_ball(img):
             #whether the ball is too close
             if max_blob.area()>2000:
                 ball_dis_flag = 2
+            elif max_blob.area()>3000:
+                ball_dis_flag = 3
             else :
                 ball_dis_flag = 1
             return x, ball_dis_flag
