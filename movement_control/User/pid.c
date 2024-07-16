@@ -147,11 +147,11 @@ void pid_closing_ball(int32_t E2, int32_t E3, int32_t ENC,
 
         const int register_num = 50;
         const float K = 10.0;
-        const float lambda = 5 * K;
+        const float lambda = 7 * K;
         const float lambda_p = 1 * K;
         const float lambda_i = 0 * K;
         const float lambda_d = 0.0 * K;
-        const float lambda_ball = 1.0;
+        const float lambda_ball = 1.5;
     
         const int MAX_PWM = 3000;
     

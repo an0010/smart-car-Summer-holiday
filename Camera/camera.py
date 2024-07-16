@@ -94,7 +94,9 @@ def search_gate(img):
         for blob in blobs:
             if blob.area()>max_blob.area():
                 max_blob = blob
-        # rect_tuple = max_blob.rect()
+        rect_tuple = max_blob.rect()
+        x_left = rect_tuple[0] #0~165
+        x_right = rect_tuple[0]+rect_tuple[2]
 #        img.draw_rectangle(rect_tuple)
         x = max_blob.cx() #0~165
         if max_blob.area()>10000:
@@ -102,8 +104,8 @@ def search_gate(img):
         else :
             gate_dis_flag = 1
         # print("rect_x:", x)
-#        print("gate_area:",max_blob.area())
-        return x, gate_dis_flag
+        print("gate_area:",max_blob.area())
+        return x, gate_dis_flag, x_left, x_right
     else:
         # print(200)
         return 200, 0
@@ -114,8 +116,8 @@ def search_ball(img):
     if blobs:
         max_blob = blobs[0]
         for blob in blobs:
-            print("blob.roundness:",blob.roundness())
-            print("blob.area():",blob.area())
+#            print("blob.roundness:",blob.roundness())
+#            print("blob.area():",blob.area())
             if (blob.roundness()>max_blob.roundness() and blob.roundness() > 0.60) or (blob.area()>max_blob.area() and blob.area()>15000):
                 max_blob = blob
 
@@ -131,7 +133,7 @@ def search_ball(img):
             #whether the ball is too close
             if max_blob.area()>7000:
                 ball_dis_flag = 3
-            elif max_blob.area()>4000:
+            elif max_blob.area()>2000:
                 ball_dis_flag = 2
             else :
                 ball_dis_flag = 1
@@ -149,7 +151,7 @@ def search_ball(img):
             #whether the ball is too close
             if max_blob.area()>7000:
                 ball_dis_flag = 3
-            elif max_blob.area()>4000:
+            elif max_blob.area()>2000:
                 ball_dis_flag = 2
             else :
                 ball_dis_flag = 1
@@ -193,15 +195,19 @@ if __name__ == "__main__":
         if gate_output:
             gate_x = gate_output[0]
             gate_dis_flag = gate_output[1]
+            gate_left_x = gate_output[2]
+            gate_right_x = gate_output[3]
 
         uart.writechar(255) # start byte
         uart.writechar(253)
         uart.writechar(ball_x) # 0-165: ball position, 200: no ball
-        print("ball_cx:", ball_x)
+#        print("ball_cx:", ball_x)
         uart.writechar(gate_x) # 0-165: gate position, 200: no gate
-#        print("gate_cx:", gate_x)
+        print("gate_cx:", gate_x)
         uart.writechar(ball_dis_flag) # 0: no ball, 1: ball is far, 2: ball is near
-        print("dis_flag:",ball_dis_flag)
+#        print("dis_flag:",ball_dis_flag)
         uart.writechar(gate_dis_flag) # 0: no gate, 1: gate is far, 2: gate is near
-#        print("dis_flag:",gate_dis_flag)
+        print("dis_flag:",gate_dis_flag)
+        uart.writechar(gate_left_x)
+        uart.writechar(gate_right_x)
         uart.writechar(254)

@@ -16,6 +16,8 @@ int32_t receive_ball_cx;
 int32_t receive_gate_cx;
 int32_t receive_ball_dis_flag;
 int32_t receive_gate_dis_flag;
+int32_t receive_gate_left_x;
+int32_t receive_gate_right_x;
 
 void clear_array(int32_t* array, int32_t length) {
 	int i = 0;
@@ -242,7 +244,7 @@ int main(void) {
 		if (state == 1) {  // (far from ball) reaching ball, fast
 			Updateturnballflag(&turnballflag, ball);
 			Updateturngateflag(&turngateflag, gate);
-			pid_closing_ball(Enc1, Enc3, ENC * 2.0, SUM_pid_speed_1, SUM_pid_speed_3, &PWM1, &PWM3, &last_ENC__1_1, &last_ENC__1_3, ball);
+			pid_closing_ball(Enc1, Enc3, ENC * 3.0, SUM_pid_speed_1, SUM_pid_speed_3, &PWM1, &PWM3, &last_ENC__1_1, &last_ENC__1_3, ball);
 			PWM2 = 0;
 			clear_array(SUM_pid_speed_turn_1, 50);
 			clear_array(SUM_pid_speed_turn_3, 50);
@@ -263,8 +265,8 @@ int main(void) {
 			Updateturnballflag(&turnballflag, ball);
 			
 			PWM1 = -500;
-			PWM2 = 0;
-			PWM3 = 1000;
+			PWM2 = -800;
+			PWM3 = 1300;
 		} else if (state == 2) { // goaling
 			Updateturnballflag(&turnballflag, ball);
 			Updateturngateflag(&turngateflag, gate);
