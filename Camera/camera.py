@@ -99,7 +99,7 @@ def search_gate(img):
         x_right = rect_tuple[0]+rect_tuple[2]
 #        img.draw_rectangle(rect_tuple)
         x = max_blob.cx() #0~165
-        if max_blob.area()>10000:
+        if max_blob.area()>12000:
             gate_dis_flag = 2
         else :
             gate_dis_flag = 1
