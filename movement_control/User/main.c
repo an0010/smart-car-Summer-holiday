@@ -114,7 +114,7 @@ void UpdateState(int ball, int gate, int ball_status, int gate_status, int* psta
 		} else if (ball_status == 2) {
 			*pstate = 3;
 		} else {
-			if (Judgegateposi(gate) == 0 || Judgegateposi(gate) == -1 || Judgegateposi(gate) == 1) {
+			if (gate_status != 0) {
 				*pstate = 2;
 			}
 		}
@@ -140,7 +140,7 @@ void UpdateState(int ball, int gate, int ball_status, int gate_status, int* psta
 		} else if (Judgegateposi(gate) == 0) {
 			*pstate = 2;
 		}
-		 else {
+		else {
 			*pstate = 4;
 		}
 	}
