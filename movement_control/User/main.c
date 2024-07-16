@@ -105,15 +105,21 @@ void UpdateState(int ball, int gate, int ball_status, int gate_status, int* psta
 			*pstate = 1;
 		} else if (ball_status == 3) {
 			*pstate = 4;
+		} else {
+			if (gate_status != 0) {
+				*pstate = 2;
+			}
 		}
 	} else if (currentstate == 4) {
 		if (ball_status == 0) {
 			*pstate = 0;
 		} else if (ball_status == 1) {
 			*pstate = 1;
-		} else if (ball_status == 2) {
+		} 
+		else if (ball_status == 2) {
 			*pstate = 3;
-		} else {
+		} 
+		else {
 			if (gate_status != 0) {
 				*pstate = 2;
 			}
@@ -123,9 +129,11 @@ void UpdateState(int ball, int gate, int ball_status, int gate_status, int* psta
 			*pstate = 0;
 		} else if (ball_status == 1) {
 			*pstate = 1;
-		} else if (ball_status == 2) {
-			*pstate = 3;
-		} else {
+		} 
+		// else if (ball_status == 2) {
+		// 	*pstate = 3;
+		// } 
+		else {
 			if (gate_status == 0) {
 				*pstate = 4;
 			}
@@ -257,7 +265,7 @@ int main(void) {
 			Updateturnballflag(&turnballflag, ball);
 			Updateturngateflag(&turngateflag, gate);
 			
-			pid_closing_ball_near(Enc1, Enc3, ENC * 1.5, &PWM1, &PWM3, ball);
+			pid_closing_ball_near(Enc1, Enc3, ENC * 1.3, &PWM1, &PWM3, ball);
 
 			clear_array(SUM_pid_speed_turn_1, 50);
 			clear_array(SUM_pid_speed_turn_3, 50);
@@ -265,7 +273,7 @@ int main(void) {
 			Updateturnballflag(&turnballflag, ball);
 			
 			PWM1 = -500;
-			PWM2 = -800;
+			PWM2 = -600;
 			PWM3 = 1300;
 		} else if (state == 2) { // goaling
 			Updateturnballflag(&turnballflag, ball);
