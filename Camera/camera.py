@@ -108,7 +108,7 @@ def search_gate(img):
         return x, gate_dis_flag, x_left, x_right
     else:
         # print(200)
-        return 200, 0
+        return 200, 0, 0, 0
 
 def search_ball(img):
     blobs = img.find_blobs(

@@ -273,7 +273,7 @@ int main(void) {
 			Updateturnballflag(&turnballflag, ball);
 			
 			PWM1 = -500;
-			PWM2 = -600;
+			PWM2 = 600;
 			PWM3 = 1300;
 		} else if (state == 2) { // goaling
 			Updateturnballflag(&turnballflag, ball);
