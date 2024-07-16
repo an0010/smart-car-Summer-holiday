@@ -216,7 +216,9 @@ int main(void) {
 		if (Read_key(KEY2) == 1) {Enc_float = 0;}
 		if (Read_key(KEY3) == 1) {Enc_float -= 0.1;}
 		led_toggle();
-		ENC = (int)Enc_float;
+		if (Enc_float > 0){ENC = 18;}
+		else {ENC = Enc_float;}
+		// ENC = (int)Enc_float;
 
 		// sensor_Value[0] = Read_sensor(sensor1);
 		// sensor_Value[1] = Read_sensor(sensor2);
@@ -240,7 +242,7 @@ int main(void) {
 		if (state == 1) {  // (far from ball) reaching ball, fast
 			Updateturnballflag(&turnballflag, ball);
 			Updateturngateflag(&turngateflag, gate);
-			pid_closing_ball(Enc1, Enc3, ENC * 1.5, SUM_pid_speed_1, SUM_pid_speed_3, &PWM1, &PWM3, &last_ENC__1_1, &last_ENC__1_3, ball);
+			pid_closing_ball(Enc1, Enc3, ENC * 2.0, SUM_pid_speed_1, SUM_pid_speed_3, &PWM1, &PWM3, &last_ENC__1_1, &last_ENC__1_3, ball);
 			PWM2 = 0;
 			clear_array(SUM_pid_speed_turn_1, 50);
 			clear_array(SUM_pid_speed_turn_3, 50);
@@ -253,7 +255,7 @@ int main(void) {
 			Updateturnballflag(&turnballflag, ball);
 			Updateturngateflag(&turngateflag, gate);
 			
-			pid_closing_ball_near(Enc1, Enc3, ENC * 1.0, &PWM1, &PWM3, ball);
+			pid_closing_ball_near(Enc1, Enc3, ENC * 1.5, &PWM1, &PWM3, ball);
 
 			clear_array(SUM_pid_speed_turn_1, 50);
 			clear_array(SUM_pid_speed_turn_3, 50);
@@ -280,6 +282,8 @@ int main(void) {
 			PWM1 = 1000;
 			PWM2 = 0;
 			PWM3 = -1000;
+			MotorCtrl3W(PWM1, PWM2, PWM3);
+			delay_1ms(1500);
 		}
 
 		MotorCtrl3W(PWM1, PWM2, PWM3);
