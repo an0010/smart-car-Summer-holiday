@@ -57,11 +57,11 @@ int Judgegateposi(int gate) {
 		return -1;
 	} else if (gate > 1.2 * centerposi && gate <= 1.4 * centerposi) {
 		return 1;
-	} else if (gate < 0.6 * centerposi && gate >= 0.5 * centerposi) {
+	} else if (gate < 0.6 * centerposi && gate >= 0.3 * centerposi) {
 		return -2;
-	} else if (gate > 1.4 * centerposi && gate <= 1.5 * centerposi) {
+	} else if (gate > 1.4 * centerposi && gate <= 1.7 * centerposi) {
 		return 2;
-	} else if (gate < 0.5 * centerposi) {
+	} else if (gate < 0.3 * centerposi) {
 		return -3;
 	} else {
 		return 3;
@@ -291,14 +291,17 @@ int main(void) {
 		} else if (state == 2) { // goaling
 			Updateturnballflag(&turnballflag, ball);
 			Updateturngateflag(&turngateflag, gate);
-			if (Judgegateposi(gate) == 0) {
-				pid_shot(Enc1, Enc3, ENC*1.5, SUM_pid_speed_1, SUM_pid_speed_3, &PWM1, &PWM3, &last_ENC__1_1, &last_ENC__1_3, 0);
-				PWM2 = 0;
-			} else if (Judgegateposi(gate) == -1 || Judgegateposi(gate) == 1) {
-				pid_speed_1_motor(Enc2,ENC*1.2*Judgegateposi(gate), &PWM2, &last_ENC__1_2);
-			} else if (Judgegateposi(gate) == -2 || Judgegateposi(gate) == 2) {
-				pid_speed_1_motor(Enc2,ENC*0.65*Judgegateposi(gate), &PWM2, &last_ENC__1_2);
-			}
+			// if (Judgegateposi(gate) == 0) {
+			// 	pid_shot(Enc1, Enc3, ENC*1.5, SUM_pid_speed_1, SUM_pid_speed_3, &PWM1, &PWM3, &last_ENC__1_1, &last_ENC__1_3, 0);
+			// 	PWM2 = 0;
+			// } else if (Judgegateposi(gate) == -1 || Judgegateposi(gate) == 1) {
+			// 	pid_speed_1_motor(Enc2,ENC*1.2*Judgegateposi(gate), &PWM2, &last_ENC__1_2);
+			// } else if (Judgegateposi(gate) == -2 || Judgegateposi(gate) == 2) {
+			// 	pid_speed_1_motor(Enc2,ENC*0.65*Judgegateposi(gate), &PWM2, &last_ENC__1_2);
+			// }
+			pid_shot(Enc1, Enc3, ENC*1.5, SUM_pid_speed_1, SUM_pid_speed_3, &PWM1, &PWM3, &last_ENC__1_1, &last_ENC__1_3, 0);
+			pid_speed_1_motor_new(&PWM2, 0.8*receive_gate_left_x+0.2*receive_gate_cx, receive_gate_right_x*0.8+receive_gate_cx*0.2, receive_gate_cx);
+
 			clear_array(SUM_pid_speed_turn_1, 50);
 			clear_array(SUM_pid_speed_turn_3, 50);
 		} else if (state == 5) { // avoiding gate
@@ -313,12 +316,12 @@ int main(void) {
 
 		MotorCtrl3W(PWM1, PWM2, PWM3);
 
-		sprintf(txt, "ENC: %d, %d, %d", Enc1, Enc2, Enc3);
+		sprintf(txt, "gate: %d, %d, %d", (int)(0.8*receive_gate_left_x+0.2*receive_gate_cx), (int)(receive_gate_right_x*0.8+receive_gate_cx*0.2), receive_gate_cx);
 		OLED_P6x8Str(0, 2, txt); // �ַ���
 
 		// sprintf(txt, "ball: %d", ball);
 		// OLED_P6x8Str(0, 2, txt); // �ַ���
-		sprintf(txt, "gate: %d", gate);
+		sprintf(txt, "ball: %d", ball);
 		OLED_P6x8Str(0, 4, txt); // �ַ���
 		sprintf(txt, "status: %d, %d", ball_status, state);
 		OLED_P6x8Str(0, 6, txt); // �ַ���

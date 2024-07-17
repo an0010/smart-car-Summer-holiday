@@ -379,6 +379,46 @@ void pid_shot(int32_t E2, int32_t E3, int32_t ENC,
         *last_ENC__1_3 = E3;
 }
 
+void pid_speed_1_motor_new(int32_t* PWM,
+                         int32_t gate_left, int32_t gate_right, int32_t gate_cx){
+
+    static int32_t SUM_pid_speed[50] = {0};
+    static int32_t last_PWM = 0;
+
+    const int register_num = 50;
+    const float K = 100.0;
+    const float lambda_p = 15 * K;
+    const float lambda_i = 0 * K;
+    const float lambda_d = 0.0 * K;
+
+    const int MAX_PWM = 3000;
+
+    int pwm;
+    pwm = *PWM;
+    
+    int loss;
+    loss = -(gate_cx-80)/(gate_left - gate_cx);
+
+    int sum_loss;
+    
+    queue_push(SUM_pid_speed, loss, register_num);
+
+    sum_loss = queue_sum(SUM_pid_speed, register_num);
+
+    pwm = lambda_p*loss +lambda_i*sum_loss;
+
+    int delta;
+    delta = pwm - last_PWM;
+
+    pwm = lambda_p*loss +lambda_i*sum_loss+lambda_d*delta;
+
+    pwm = pwm>MAX_PWM?MAX_PWM:pwm;
+    pwm = pwm<-MAX_PWM?-MAX_PWM:pwm;
+
+    *PWM = pwm;
+    last_PWM = pwm;
+}
+
 void pid_fine_turn_ball(
     int32_t* PWM2, int32_t *PWM3,
     int32_t ball_x){
