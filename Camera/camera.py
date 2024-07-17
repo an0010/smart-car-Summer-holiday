@@ -117,8 +117,8 @@ def search_ball(img):
         max_blob = blobs[0]
         for blob in blobs:
 #            print("blob.roundness:",blob.roundness())
-#            print("blob.area():",blob.area())
-            if (blob.roundness()>max_blob.roundness() and blob.roundness() > 0.60) or (blob.area()>max_blob.area() and blob.area()>15000):
+            print("blob.area():",blob.area())
+            if (blob.roundness()>max_blob.roundness()) or (blob.area()>max_blob.area() and blob.area()>15000):
                 max_blob = blob
 
         # case 1: ball is far and round
@@ -140,7 +140,7 @@ def search_ball(img):
             return x, ball_dis_flag
 
         # case 2: ball is near so it is not round
-        elif max_blob.area()>1000:
+        elif max_blob.area()>1:
             circle_tuple = max_blob.enclosing_circle()
 #            img.draw_circle(circle_tuple)
             x = circle_tuple[0] #0~165

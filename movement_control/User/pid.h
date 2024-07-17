@@ -5,6 +5,8 @@
 // void pid_straight(int E2,int E3,int PWM,int* SUM_pid_straight,int* PWM2,int* PWM3);
 void pid_speed(int32_t E2, int32_t E3, int32_t ENC, int32_t* SUM_pid_speed_2,int32_t* SUM_pid_speed_3, int32_t* PWM2, int32_t *PWM3, int32_t *last_ENC__1_2, int32_t *last_ENC__1_3);
 void pid_speed_1_motor(int32_t E, int32_t ENC, int32_t* PWM, int32_t* last_ENC);
+void pid_speed_3_motor(int32_t E1, int32_t E2, int32_t E3,
+                      int32_t ENC, int32_t* PWM1, int32_t* PWM2, int32_t* PWM3);
 void pid_speed_both_ENC(int32_t E2, int32_t E3, int32_t ENC_2,int32_t ENC_3 , int32_t* SUM_pid_speed_2,int32_t* SUM_pid_speed_3, int32_t* PWM2, int32_t *PWM3, int32_t *last_ENC__1_2, int32_t *last_ENC__1_3);
 void pid_closing_ball(int32_t E2, int32_t E3, int32_t ENC, 
     int32_t* SUM_pid_speed_2,int32_t* SUM_pid_speed_3,

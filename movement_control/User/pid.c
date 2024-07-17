@@ -54,8 +54,8 @@ void pid_speed_1_motor(int32_t E, int32_t ENC, int32_t* PWM, int32_t* last_ENC){
 
     const int register_num = 50;
     const float K = 10.0;
-    const float lambda = 20 * K;
-    const float lambda_p = 5 * K;
+    const float lambda = 5 * K;
+    const float lambda_p = 3 * K;
     const float lambda_i = 0 * K;
     const float lambda_d = 0.0 * K;
 
@@ -83,6 +83,70 @@ void pid_speed_1_motor(int32_t E, int32_t ENC, int32_t* PWM, int32_t* last_ENC){
 
     *PWM = pwm;
     *last_ENC = E;
+}
+
+void pid_speed_3_motor(int32_t E1, int32_t E2, int32_t E3,
+                      int32_t ENC, int32_t* PWM1, int32_t* PWM2, int32_t* PWM3){
+
+    static int32_t SUM_pid_speed_1[50] = {0};
+    static int32_t SUM_pid_speed_2[50] = {0};
+    static int32_t SUM_pid_speed_3[50] = {0};
+
+    static int32_t last_ENC_1 = 0;
+    static int32_t last_ENC_2 = 0;
+    static int32_t last_ENC_3 = 0;
+
+    const int register_num = 50;
+    const float K = 10.0;
+    const float lambda = 5 * K;
+    const float lambda_p = 3 * K;
+    const float lambda_i = 0 * K;
+    const float lambda_d = 0.0 * K;
+
+    const int MAX_PWM = 3000;
+
+    int pwm1, pwm2, pwm3;
+    pwm1 = *PWM1;
+    pwm2 = *PWM2;
+    pwm3 = *PWM3;
+    
+    int loss1, loss2, loss3;
+    loss1 = ENC - E1;
+    loss2 = ENC - E2;
+    loss3 = ENC - E3;
+
+    int sum_loss1, sum_loss2, sum_loss3;
+    
+    queue_push(SUM_pid_speed_1, loss1, register_num);
+    queue_push(SUM_pid_speed_2, loss2, register_num);
+    queue_push(SUM_pid_speed_3, loss3, register_num);
+
+    sum_loss1 = queue_sum(SUM_pid_speed_1, register_num);
+    sum_loss2 = queue_sum(SUM_pid_speed_2, register_num);
+    sum_loss3 = queue_sum(SUM_pid_speed_3, register_num);
+
+    int delta1, delta2, delta3; 
+    delta1 = E1 - last_ENC_1;
+    delta2 = E2 - last_ENC_2;
+    delta3 = E3 - last_ENC_3;
+
+    pwm1 = lambda*ENC + lambda_p*loss1 +lambda_i*sum_loss1+lambda_d*delta1;
+    pwm2 = lambda*ENC + lambda_p*loss2 +lambda_i*sum_loss2+lambda_d*delta2;
+    pwm3 = lambda*ENC + lambda_p*loss3 +lambda_i*sum_loss3+lambda_d*delta3;
+
+    pwm1 = pwm1>MAX_PWM?MAX_PWM:pwm1;
+    pwm2 = pwm2>MAX_PWM?MAX_PWM:pwm2;
+    pwm3 = pwm3>MAX_PWM?MAX_PWM:pwm3;
+    pwm1 = pwm1<-MAX_PWM?-MAX_PWM:pwm1;
+    pwm2 = pwm2<-MAX_PWM?-MAX_PWM:pwm2;
+    pwm3 = pwm3<-MAX_PWM?-MAX_PWM:pwm3;
+
+    *PWM1 = pwm1;
+    *PWM2 = pwm2;
+    *PWM3 = pwm3;
+    last_ENC_1 = E1;
+    last_ENC_2 = E2;
+    last_ENC_3 = E3;
 }
 
 void pid_speed_both_ENC(int32_t E2, int32_t E3, int32_t ENC_2,int32_t ENC_3 , int32_t* SUM_pid_speed_2,int32_t* SUM_pid_speed_3, int32_t* PWM2, int32_t *PWM3, int32_t *last_ENC__1_2, int32_t *last_ENC__1_3){
@@ -269,8 +333,8 @@ void pid_shot(int32_t E2, int32_t E3, int32_t ENC,
         const float K = 10.0;
         const float lambda = 20 * K;
         const float lambda_p = 5 * K;
-        const float lambda_i = 1 * K;
-        const float lambda_d = 0.1 * K;
+        const float lambda_i = 0 * K;
+        const float lambda_d = 0.0 * K;
         const float lambda_bias = 0.4;
     
         const int MAX_PWM = 3000;

@@ -64,7 +64,7 @@ int Judgegateposi(int gate) {
 void Updateturnballflag(int* pflag, int ball) {
 	if (Judgeballposi(ball) < 0) {
 		*pflag = -1;
-	} else {
+	} else if (Judgeballposi(ball) > 0) {
 		*pflag = 1;
 	}
 }
@@ -72,7 +72,7 @@ void Updateturnballflag(int* pflag, int ball) {
 void Updateturngateflag(int* pflag, int gate) {
 	if (Judgegateposi(gate) < 0) {
 		*pflag = -1;
-	} else {
+	} else if (Judgegateposi(gate) > 0) {
 		*pflag = 1;
 	}
 }
@@ -149,10 +149,9 @@ void UpdateState(int ball, int gate, int ball_status, int gate_status, int* psta
 			*pstate = 1;
 		} else if (ball_status == 2) {
 			*pstate = 3;
-		} else if (Judgegateposi(gate) == 0) {
+		} else if (ball_status == 3 && Judgegateposi(gate) == 0) {
 			*pstate = 2;
-		}
-		else {
+		} else {
 			*pstate = 4;
 		}
 	}
@@ -234,7 +233,7 @@ int main(void) {
 		if (Read_key(KEY2) == 1) {Enc_float = 0;}
 		if (Read_key(KEY3) == 1) {Enc_float -= 0.1;}
 		led_toggle();
-		if (Enc_float > 0){ENC = 18;}
+		if (Enc_float > 0){ENC = 30;}
 		else {ENC = Enc_float;}
 		// ENC = (int)Enc_float;
 
@@ -260,20 +259,19 @@ int main(void) {
 		if (state == 1) {  // (far from ball) reaching ball, fast
 			Updateturnballflag(&turnballflag, ball);
 			Updateturngateflag(&turngateflag, gate);
-			pid_closing_ball(Enc1, Enc3, ENC * 3.0, SUM_pid_speed_1, SUM_pid_speed_3, &PWM1, &PWM3, &last_ENC__1_1, &last_ENC__1_3, ball);
+			pid_closing_ball(Enc1, Enc3, ENC * 1.0, SUM_pid_speed_1, SUM_pid_speed_3, &PWM1, &PWM3, &last_ENC__1_1, &last_ENC__1_3, ball);
 			PWM2 = 0;
 			clear_array(SUM_pid_speed_turn_1, 50);
 			clear_array(SUM_pid_speed_turn_3, 50);
 		} else if (state == 0) { // circling around to find ball
 			Updateturngateflag(&turngateflag, gate);
-			pid_speed_1_motor(Enc2, ENC * 0.3 * turnballflag, &PWM2, &last_ENC__1_2);
-			PWM1 = PWM2;
-			PWM3 = PWM2;
+			// pid_speed_1_motor(Enc2, ENC * 1.0 * turnballflag, &PWM2, &last_ENC__1_2);
+			pid_speed_3_motor(Enc1, Enc2, Enc3, ENC * 1.0, &PWM1, &PWM2, &PWM3);
 		} else if (state == 3) { // (near ball) reaching ball, slow
 			Updateturnballflag(&turnballflag, ball);
 			Updateturngateflag(&turngateflag, gate);
 			
-			pid_closing_ball_near(Enc1, Enc3, ENC * 1.5, &PWM1, &PWM3, ball);
+			pid_closing_ball_near(Enc1, Enc3, ENC * 1.0, &PWM1, &PWM3, ball);
 
 			clear_array(SUM_pid_speed_turn_1, 50);
 			clear_array(SUM_pid_speed_turn_3, 50);
@@ -317,13 +315,13 @@ int main(void) {
 		OLED_P6x8Str(0, 6, txt); // �ַ���
 
 		strcat(txt_to_send, "{\"a\": ");//"ball_cx":
-		strcat(txt_to_send, intToStr(receive_ball_cx, buffer, 10));
-		strcat(txt_to_send, " ,\"b\": ");//"gate_cx":
-		strcat(txt_to_send, intToStr(receive_gate_cx, buffer, 10));
-		strcat(txt_to_send, " ,\"c\": ");//"ball_dis_flag":
-		strcat(txt_to_send, intToStr(receive_ball_dis_flag, buffer, 10));
-		strcat(txt_to_send, " ,\"d\": ");//"gate_dis_flag":
-		strcat(txt_to_send, intToStr(receive_gate_dis_flag, buffer, 10));
+		strcat(txt_to_send, intToStr(receive_ball_cx*turnballflag, buffer, 10));
+		// strcat(txt_to_send, " ,\"b\": ");//"gate_cx":
+		// strcat(txt_to_send, intToStr(receive_gate_cx, buffer, 10));
+		// strcat(txt_to_send, " ,\"c\": ");//"ball_dis_flag":
+		// strcat(txt_to_send, intToStr(receive_ball_dis_flag, buffer, 10));
+		// strcat(txt_to_send, " ,\"d\": ");//"gate_dis_flag":
+		// strcat(txt_to_send, intToStr(receive_gate_dis_flag, buffer, 10));
 		// strcat(txt_to_send, " ,\"e\": ");//"gate_left_x":
 		// strcat(txt_to_send, intToStr(receive_gate_left_x, buffer, 10));
 		// strcat(txt_to_send, " ,\"f\": ");//"gate_right_x":
