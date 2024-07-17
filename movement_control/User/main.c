@@ -21,7 +21,7 @@ int32_t receive_gate_dis_flag;
 int32_t receive_gate_left_x;
 int32_t receive_gate_right_x;
 int32_t receive_tag_cx;
-int32_t receive_tag_dis_flag;
+int32_t receive_tag_dis;
 
 void reverse(char str[], int length);
 char* intToStr(int num, char* str, int base);
