@@ -50,11 +50,11 @@ int Judgegateposi(int gate) {
 	int centerposi = 82;
 	if (gate >= 0.6 * centerposi && gate <= 1.4 * centerposi) {
 		return 0;
-	} else if (gate < 0.6 * centerposi && gate >= 0.3 * centerposi) {
+	} else if (gate < 0.6 * centerposi && gate >= 0.45 * centerposi) {
 		return -1;
-	} else if (gate > 1.4 * centerposi && gate <= 1.7 * centerposi) {
+	} else if (gate > 1.4 * centerposi && gate <= 1.65 * centerposi) {
 		return 1;
-	} else if (gate < 0.3 * centerposi) {
+	} else if (gate < 0.45 * centerposi) {
 		return -2;
 	} else {
 		return 2;
