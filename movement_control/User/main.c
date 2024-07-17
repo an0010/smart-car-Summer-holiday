@@ -51,15 +51,15 @@ int Judgeballposi(int ball) {
 
 int Judgegateposi(int gate) {
 	int centerposi = 82;
-	if (gate >= 0.9 * centerposi && gate <= 1.1 * centerposi) {
+	if (gate >= 0.8 * centerposi && gate <= 1.2 * centerposi) {
 		return 0;
-	} else if (gate < 0.9 * centerposi && gate >= 0.7 * centerposi) {
+	} else if (gate < 0.8 * centerposi && gate >= 0.6 * centerposi) {
 		return -1;
-	} else if (gate > 1.1 * centerposi && gate <= 1.3 * centerposi) {
+	} else if (gate > 1.2 * centerposi && gate <= 1.4 * centerposi) {
 		return 1;
-	} else if (gate < 0.7 * centerposi && gate >= 0.5 * centerposi) {
+	} else if (gate < 0.6 * centerposi && gate >= 0.5 * centerposi) {
 		return -2;
-	} else if (gate > 1.3 * centerposi && gate <= 1.5 * centerposi) {
+	} else if (gate > 1.4 * centerposi && gate <= 1.5 * centerposi) {
 		return 2;
 	} else if (gate < 0.5 * centerposi) {
 		return -3;
