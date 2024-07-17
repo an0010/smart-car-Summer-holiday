@@ -210,4 +210,6 @@ if __name__ == "__main__":
         print("dis_flag:",gate_dis_flag)
         uart.writechar(gate_left_x)
         uart.writechar(gate_right_x)
+        uart.writechar(int(AprilTag_cx))
+        uart.writechar(int(AprilTag_distance))
         uart.writechar(254)
