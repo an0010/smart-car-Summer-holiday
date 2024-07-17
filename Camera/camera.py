@@ -140,7 +140,7 @@ def search_ball(img):
             return x, ball_dis_flag
 
         # case 2: ball is near so it is not round
-        elif max_blob.area()>1:
+        elif max_blob.area()>90:
             circle_tuple = max_blob.enclosing_circle()
 #            img.draw_circle(circle_tuple)
             x = circle_tuple[0] #0~165
