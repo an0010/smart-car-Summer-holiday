@@ -310,7 +310,7 @@ int main(void) {
 			PWM2 = 0;
 			PWM3 = -1000;
 			MotorCtrl3W(PWM1, PWM2, PWM3);
-			delay_1ms(1500);
+			delay_1ms(500);
 		}
 
 		MotorCtrl3W(PWM1, PWM2, PWM3);
