@@ -211,5 +211,6 @@ if __name__ == "__main__":
         uart.writechar(gate_left_x)
         uart.writechar(gate_right_x)
         uart.writechar(int(AprilTag_cx))
+        print("tag_dis:",int(AprilTag_distance))
         uart.writechar(int(AprilTag_distance))
         uart.writechar(254)
