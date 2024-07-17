@@ -315,7 +315,7 @@ int main(void) {
 		OLED_P6x8Str(0, 6, txt); // �ַ���
 
 		strcat(txt_to_send, "{\"a\": ");//"ball_cx":
-		strcat(txt_to_send, intToStr(receive_ball_cx*turnballflag, buffer, 10));
+		strcat(txt_to_send, intToStr(receive_ball_cx, buffer, 10));
 		// strcat(txt_to_send, " ,\"b\": ");//"gate_cx":
 		// strcat(txt_to_send, intToStr(receive_gate_cx, buffer, 10));
 		// strcat(txt_to_send, " ,\"c\": ");//"ball_dis_flag":
