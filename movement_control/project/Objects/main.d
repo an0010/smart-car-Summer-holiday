@@ -45,3 +45,4 @@
 .\objects\main.o: ..\User\APP\inc\Photoelectric.h
 .\objects\main.o: ..\User\APP\inc\hcsr04_driver.h
 .\objects\main.o: ..\User\pid.h
+.\objects\main.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
