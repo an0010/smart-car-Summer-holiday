@@ -4,8 +4,8 @@
 #include <stdint.h>
 
 
-#define USART_RECV_BUF_SIZE 64// ´®¿Ú½ÓÊÕ»º´æ³¤¶È
-#define USART_SEND_BUF_SIZE 64// ´®¿Ú·¢ËÍ»º´æ³¤¶È
+#define USART_RECV_BUF_SIZE 64// ï¿½ï¿½ï¿½Ú½ï¿½ï¿½Õ»ï¿½ï¿½æ³¤ï¿½ï¿½
+#define USART_SEND_BUF_SIZE 64// ï¿½ï¿½ï¿½Ú·ï¿½ï¿½Í»ï¿½ï¿½æ³¤ï¿½ï¿½
 
 void USART1_Init(uint32_t Baud_rate);
 void USART2_Init(uint32_t Baud_rate);
@@ -16,5 +16,7 @@ void USART_Sent_String(uint32_t usart_periph,char *str);
 void Test_UASRT1(void);
 int32_t Test_UASRT2(void);
 void Data_parsing(void);
+
+void send_string(char *str);
 
 #endif
