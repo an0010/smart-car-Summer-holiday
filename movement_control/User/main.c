@@ -288,7 +288,7 @@ int main(void) {
 				pid_shot(Enc1, Enc3, ENC*1.5, SUM_pid_speed_1, SUM_pid_speed_3, &PWM1, &PWM3, &last_ENC__1_1, &last_ENC__1_3, 0);
 				PWM2 = 0;
 			} else if (Judgegateposi(gate) == -1 || Judgegateposi(gate) == 1) {
-				pid_speed_1_motor(Enc2,ENC*0.8*Judgegateposi(gate), &PWM2, &last_ENC__1_2);
+				pid_speed_1_motor(Enc2,ENC*1.2*Judgegateposi(gate), &PWM2, &last_ENC__1_2);
 			}
 			clear_array(SUM_pid_speed_turn_1, 50);
 			clear_array(SUM_pid_speed_turn_3, 50);
