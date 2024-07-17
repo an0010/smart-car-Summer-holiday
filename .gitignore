@@ -1,2 +1,6 @@
 /data
 /data_processing
+/movement_control/CMSIS
+/movement_control/Library
+/movement_control/project
+/movement_control/Startup
