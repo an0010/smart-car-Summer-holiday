@@ -233,7 +233,7 @@ int main(void) {
 		if (Read_key(KEY2) == 1) {Enc_float = 0;}
 		if (Read_key(KEY3) == 1) {Enc_float -= 0.1;}
 		led_toggle();
-		if (Enc_float > 0){ENC = 30;}
+		if (Enc_float > 0){ENC = 40;}
 		else {ENC = Enc_float;}
 		// ENC = (int)Enc_float;
 
@@ -259,14 +259,14 @@ int main(void) {
 		if (state == 1) {  // (far from ball) reaching ball, fast
 			Updateturnballflag(&turnballflag, ball);
 			Updateturngateflag(&turngateflag, gate);
-			pid_closing_ball(Enc1, Enc3, ENC * 1.0, SUM_pid_speed_1, SUM_pid_speed_3, &PWM1, &PWM3, &last_ENC__1_1, &last_ENC__1_3, ball);
+			pid_closing_ball(Enc1, Enc3, ENC * 2.0, SUM_pid_speed_1, SUM_pid_speed_3, &PWM1, &PWM3, &last_ENC__1_1, &last_ENC__1_3, ball);
 			PWM2 = 0;
 			clear_array(SUM_pid_speed_turn_1, 50);
 			clear_array(SUM_pid_speed_turn_3, 50);
 		} else if (state == 0) { // circling around to find ball
 			Updateturngateflag(&turngateflag, gate);
 			// pid_speed_1_motor(Enc2, ENC * 1.0 * turnballflag, &PWM2, &last_ENC__1_2);
-			pid_speed_3_motor(Enc1, Enc2, Enc3, ENC * 1.0, &PWM1, &PWM2, &PWM3);
+			pid_speed_3_motor(Enc1, Enc2, Enc3, ENC * 0.4 * turnballflag, &PWM1, &PWM2, &PWM3);
 		} else if (state == 3) { // (near ball) reaching ball, slow
 			Updateturnballflag(&turnballflag, ball);
 			Updateturngateflag(&turngateflag, gate);
