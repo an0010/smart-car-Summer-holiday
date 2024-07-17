@@ -217,7 +217,7 @@ void pid_closing_ball(int32_t E2, int32_t E3, int32_t ENC,
         const float lambda_d = 0.0 * K;
         const float lambda_ball = 3;
     
-        const int MAX_PWM = 4500;
+        const int MAX_PWM = 5500;
     
         int pwm2,pwm3;
         pwm2 = *PWM2;
@@ -337,7 +337,7 @@ void pid_shot(int32_t E2, int32_t E3, int32_t ENC,
         const float lambda_d = 0.0 * K;
         const float lambda_bias = 0.4;
     
-        const int MAX_PWM = 3000;
+        const int MAX_PWM = 5500;
     
         int pwm2,pwm3;
         pwm2 = *PWM2;
