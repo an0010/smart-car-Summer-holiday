@@ -21,7 +21,7 @@ int32_t receive_gate_dis_flag;
 int32_t receive_gate_left_x;
 int32_t receive_gate_right_x;
 int32_t receive_tag_cx;
-int32_t receive_tag_dis;
+int32_t receive_tag_dis_flag;
 
 void reverse(char str[], int length);
 char* intToStr(int num, char* str, int base);
@@ -51,15 +51,15 @@ int Judgeballposi(int ball) {
 
 int Judgegateposi(int gate) {
 	int centerposi = 82;
-	if (gate >= 0.9 * centerposi && gate <= 1.1 * centerposi) {
+	if (gate >= 0.8 * centerposi && gate <= 1.2 * centerposi) {
 		return 0;
-	} else if (gate < 0.9 * centerposi && gate >= 0.7 * centerposi) {
+	} else if (gate < 0.8 * centerposi && gate >= 0.6 * centerposi) {
 		return -1;
-	} else if (gate > 1.1 * centerposi && gate <= 1.3 * centerposi) {
+	} else if (gate > 1.2 * centerposi && gate <= 1.4 * centerposi) {
 		return 1;
-	} else if (gate < 0.7 * centerposi && gate >= 0.5 * centerposi) {
+	} else if (gate < 0.6 * centerposi && gate >= 0.5 * centerposi) {
 		return -2;
-	} else if (gate > 1.3 * centerposi && gate <= 1.5 * centerposi) {
+	} else if (gate > 1.4 * centerposi && gate <= 1.5 * centerposi) {
 		return 2;
 	} else if (gate < 0.5 * centerposi) {
 		return -3;
@@ -84,12 +84,16 @@ void Updateturngateflag(int* pflag, int gate) {
 	}
 }
 
-void UpdateState(int ball, int gate, int ball_status, int gate_status, int* pstate) {
+void UpdateState(int ball, int gate, int tag, int ball_status, int gate_status, int tag_status, int* pstate) {
 	// 0:finding ball; 1:ball found, far; 2:goaling; 3:ball found, near; 4:ball found, very near, finding gate 5:avoiding gate
     int currentstate = *pstate;  
 
 	if (gate_status == 2) {
 		*pstate = 5;
+		return;
+	}
+	if (tag_status < 0) {
+		*pstate = 6;
 		return;
 	}
 
@@ -161,6 +165,18 @@ void UpdateState(int ball, int gate, int ball_status, int gate_status, int* psta
 		} else {
 			*pstate = 4;
 		}
+	} else if (currentstate == 6) {
+		if (ball_status == 0) {
+			*pstate = 0;
+		} else if (ball_status == 1) {
+			*pstate = 1;
+		} else if (ball_status == 2) {
+			*pstate = 3;
+		} else if (ball_status == 3 && Judgegateposi(gate) == 0) {
+			*pstate = 2;
+		} else {
+			*pstate = 4;
+		}
 	}
 }
 
@@ -198,8 +214,10 @@ int main(void) {
 
 	int32_t ball = 0;        // Ball position
 	int32_t gate = 0;        // Gate position
+	int32_t tag = 0;         // Tag position
 	int32_t ball_status = 0; // 0: not found; 1: found, far; 2: found, near; 3: found, very near
 	int32_t gate_status = 0; // 0: not found; 1: found, far; 2: found, near; 3: found, very near
+	int32_t tag_status = 0;  // 0: not found; 1: found, far; 2: found, near; 3: found, very near
 
 	int32_t Enc1 = 0; //front-left wheel
 	int32_t Enc2 = 0; //rear wheel
@@ -255,10 +273,12 @@ int main(void) {
 
 		ball = receive_ball_cx;
 		gate = receive_gate_cx;
+		tag = receive_tag_cx;
 		ball_status = receive_ball_dis_flag;
 		gate_status = receive_gate_dis_flag;
+		tag_status = receive_tag_dis_flag;
 
-		UpdateState(ball, gate, ball_status, gate_status, &state);
+		UpdateState(ball, gate, tag, ball_status, gate_status, tag_status, &state);
 
 		//从左到右 1 0 2 3
 		//flag为1：向右转
@@ -297,7 +317,7 @@ int main(void) {
 			} else if (Judgegateposi(gate) == -1 || Judgegateposi(gate) == 1) {
 				pid_speed_1_motor(Enc2,ENC*1.2*Judgegateposi(gate), &PWM2, &last_ENC__1_2);
 			} else if (Judgegateposi(gate) == -2 || Judgegateposi(gate) == 2) {
-				pid_speed_1_motor(Enc2,ENC*1.2*Judgegateposi(gate), &PWM2, &last_ENC__1_2);
+				pid_speed_1_motor(Enc2,ENC*0.65*Judgegateposi(gate), &PWM2, &last_ENC__1_2);
 			}
 			clear_array(SUM_pid_speed_turn_1, 50);
 			clear_array(SUM_pid_speed_turn_3, 50);
@@ -309,6 +329,12 @@ int main(void) {
 			PWM3 = -1000;
 			MotorCtrl3W(PWM1, PWM2, PWM3);
 			delay_1ms(1500);
+		} else if (state == 6) {
+			Updateturnballflag(&turnballflag, ball);
+			Updateturngateflag(&turngateflag, gate);
+			PWM1 = 0;
+			PWM2 = 1000;
+			PWM3 = 0;
 		}
 
 		MotorCtrl3W(PWM1, PWM2, PWM3);
