@@ -215,7 +215,7 @@ void pid_closing_ball(int32_t E2, int32_t E3, int32_t ENC,
         const float lambda_p = 1 * K;
         const float lambda_i = 0 * K;
         const float lambda_d = 0.0 * K;
-        const float lambda_ball = 3;
+        const float lambda_ball = 4;
     
         const int MAX_PWM = 5500;
     
@@ -382,13 +382,13 @@ void pid_shot(int32_t E2, int32_t E3, int32_t ENC,
 void pid_speed_1_motor_new(int32_t* PWM,
                          int32_t gate_left, int32_t gate_right, int32_t gate_cx){
 
-    static int32_t SUM_pid_speed[50] = {0};
+    static int32_t SUM_pid_speed[10] = {0};
     static int32_t last_PWM = 0;
 
-    const int register_num = 50;
+    const int register_num = 10;
     const float K = 100.0;
-    const float lambda_p = 15 * K;
-    const float lambda_i = 0 * K;
+    const float lambda_p = 7 * K;
+    const float lambda_i = 0.0 * K;
     const float lambda_d = 0.0 * K;
 
     const int MAX_PWM = 3000;

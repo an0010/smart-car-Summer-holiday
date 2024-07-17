@@ -273,7 +273,7 @@ int main(void) {
 		} else if (state == 0) { // circling around to find ball
 			Updateturngateflag(&turngateflag, gate);
 			// pid_speed_1_motor(Enc2, ENC * 1.0 * turnballflag, &PWM2, &last_ENC__1_2);
-			pid_speed_3_motor(Enc1, Enc2, Enc3, ENC * 0.4 * turnballflag, &PWM1, &PWM2, &PWM3);
+			pid_speed_3_motor(Enc1, Enc2, Enc3, ENC * 0.45 * turnballflag, &PWM1, &PWM2, &PWM3);
 		} else if (state == 3) { // (near ball) reaching ball, slow
 			Updateturnballflag(&turnballflag, ball);
 			Updateturngateflag(&turngateflag, gate);
@@ -283,11 +283,10 @@ int main(void) {
 			clear_array(SUM_pid_speed_turn_1, 50);
 			clear_array(SUM_pid_speed_turn_3, 50);
 		} else if (state == 4) { // (very near ball) finding gate
-			Updateturnballflag(&turnballflag, ball);
-			
-			PWM1 = -500;
-			PWM2 = 600;
-			PWM3 = 1300;
+			PWM1 = -500 * turnballflag;
+			PWM2 = 600 * turnballflag;
+			PWM3 = 1300 * turnballflag;
+			// Updateturnballflag(&turnballflag, ball);
 		} else if (state == 2) { // goaling
 			Updateturnballflag(&turnballflag, ball);
 			Updateturngateflag(&turngateflag, gate);
@@ -299,8 +298,8 @@ int main(void) {
 			// } else if (Judgegateposi(gate) == -2 || Judgegateposi(gate) == 2) {
 			// 	pid_speed_1_motor(Enc2,ENC*0.65*Judgegateposi(gate), &PWM2, &last_ENC__1_2);
 			// }
-			pid_shot(Enc1, Enc3, ENC*1.5, SUM_pid_speed_1, SUM_pid_speed_3, &PWM1, &PWM3, &last_ENC__1_1, &last_ENC__1_3, 0);
-			pid_speed_1_motor_new(&PWM2, 0.8*receive_gate_left_x+0.2*receive_gate_cx, receive_gate_right_x*0.8+receive_gate_cx*0.2, receive_gate_cx);
+			pid_shot(Enc1, Enc3, ENC*1.0, SUM_pid_speed_1, SUM_pid_speed_3, &PWM1, &PWM3, &last_ENC__1_1, &last_ENC__1_3, 0);
+			pid_speed_1_motor_new(&PWM2, 0.6*receive_gate_left_x+0.4*receive_gate_cx, receive_gate_right_x*0.6+receive_gate_cx*0.4, receive_gate_cx);
 
 			clear_array(SUM_pid_speed_turn_1, 50);
 			clear_array(SUM_pid_speed_turn_3, 50);
