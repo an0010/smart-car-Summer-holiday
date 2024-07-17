@@ -155,13 +155,15 @@ extern uint16_t USART_Rx_Len;   // ??????? RX ???????????????
 extern uint16_t USART_Rx_Count; // ??????? RX ??????????????????????????
 
 /* ????2?L???????????�????h????????????h????? */
-int32_t receive_data[6];
+int32_t receive_data[20];
 extern int32_t receive_ball_cx;
 extern int32_t receive_gate_cx;
 extern int32_t receive_ball_dis_flag;
 extern int32_t receive_gate_dis_flag;
 extern int32_t receive_gate_left_x;
 extern int32_t receive_gate_right_x;
+extern int32_t receive_tag_cx;
+extern int32_t receive_tag_dis_flag;
 
 void USART2_IRQHandler(void)
 {
@@ -183,14 +185,16 @@ void USART2_IRQHandler(void)
             receive_index = 0;
         }
         // 若增加数据帧长度，修改这里的7和6
-        if(receive_index == 9){
-            if(receive_data[8] == last_receive_data){
+        if(receive_index == 11){
+            if(receive_data[9] == last_receive_data){
                 receive_ball_cx = receive_data[2];
                 receive_gate_cx = receive_data[3];
                 receive_ball_dis_flag = receive_data[4];
                 receive_gate_dis_flag = receive_data[5];
                 receive_gate_left_x = receive_data[6];
                 receive_gate_right_x = receive_data[7];
+                receive_tag_cx = receive_data[8];
+                receive_tag_dis_flag = receive_data[10];
                 receive_index = 0;
             }
         }
