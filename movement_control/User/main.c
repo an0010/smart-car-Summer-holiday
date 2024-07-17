@@ -33,13 +33,13 @@ void clear_array(int32_t* array, int32_t length) {
 //return [0:center; 1:slightly right; 2:far right; -1:slightly left; -2:far left]
 int Judgeballposi(int ball) {
 	int centerposi = 82;
-	if (ball >= 0.65 * centerposi && ball <= 1.35 * centerposi) {
+	if (ball >= 0.9 * centerposi && ball <= 1.1 * centerposi) {
 		return 0;
-	} else if (ball < 0.65 * centerposi && ball >= 0.45 * centerposi) {
+	} else if (ball < 0.9 * centerposi && ball >= 0.7 * centerposi) {
 		return -1;
-	} else if (ball > 1.35 * centerposi && ball <= 1.55 * centerposi) {
+	} else if (ball > 1.3 * centerposi && ball <= 1.1 * centerposi) {
 		return 1;
-	} else if (ball < 0.45 * centerposi) {
+	} else if (ball < 0.7 * centerposi) {
 		return -2;
 	} else {
 		return 2;
@@ -64,7 +64,7 @@ int Judgegateposi(int gate) {
 void Updateturnballflag(int* pflag, int ball) {
 	if (Judgeballposi(ball) < 0) {
 		*pflag = -1;
-	} else if (Judgeballposi(ball) > 0) {
+	} else {
 		*pflag = 1;
 	}
 }
@@ -72,7 +72,7 @@ void Updateturnballflag(int* pflag, int ball) {
 void Updateturngateflag(int* pflag, int gate) {
 	if (Judgegateposi(gate) < 0) {
 		*pflag = -1;
-	} else if (Judgegateposi(gate) > 0) {
+	} else {
 		*pflag = 1;
 	}
 }

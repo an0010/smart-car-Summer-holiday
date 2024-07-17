@@ -769,7 +769,7 @@ I (..\Library\Include\gd32f10x_sdio.h)(0x6684C030)
 I (..\Library\Include\gd32f10x_spi.h)(0x6684C030)
 I (..\Library\Include\gd32f10x_timer.h)(0x6684C030)
 I (..\Library\Include\gd32f10x_usart.h)(0x6684C030)
-F (..\User\gd32f10x_it.c)(0x668F4217)(--gnu -c --cpu Cortex-M3 -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I ..\CMSIS -I ..\Library\Include -I ..\User -I ..\User\APP\inc-ID:\Keil_v5\GigaDevice\GD32F10x_DFP\2.3.0\Device\Include-D__UVISION_VERSION="536" -DGD32F10X_MD -DUSE_STDPERIPH_DRIVER -DGD32F10X_MD -D__FPU_PRESENT-o .\objects\gd32f10x_it.o --omf_browse .\objects\gd32f10x_it.crf --depend .\objects\gd32f10x_it.d)
+F (..\User\gd32f10x_it.c)(0x6695D950)(--gnu -c --cpu Cortex-M3 -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I ..\CMSIS -I ..\Library\Include -I ..\User -I ..\User\APP\inc-ID:\Keil_v5\GigaDevice\GD32F10x_DFP\2.3.0\Device\Include-D__UVISION_VERSION="536" -DGD32F10X_MD -DUSE_STDPERIPH_DRIVER -DGD32F10X_MD -D__FPU_PRESENT-o .\objects\gd32f10x_it.o --omf_browse .\objects\gd32f10x_it.crf --depend .\objects\gd32f10x_it.d)
 I (..\User\gd32f10x_it.h)(0x6684C030)
 I (..\CMSIS\gd32f10x.h)(0x6684C030)
 I (..\CMSIS\core_cm3.h)(0x6684C030)
@@ -805,7 +805,7 @@ I (..\Library\Include\gd32f10x_wwdgt.h)(0x6684C030)
 I (..\User\main.h)(0x6684C030)
 I (..\User\systick.h)(0x6684C030)
 I (..\User\APP\inc\led_driver.h)(0x6684C030)
-F (..\User\main.c)(0x668F4C63)(--gnu -c --cpu Cortex-M3 -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I ..\CMSIS -I ..\Library\Include -I ..\User -I ..\User\APP\inc-ID:\Keil_v5\GigaDevice\GD32F10x_DFP\2.3.0\Device\Include-D__UVISION_VERSION="536" -DGD32F10X_MD -DUSE_STDPERIPH_DRIVER -DGD32F10X_MD -D__FPU_PRESENT-o .\objects\main.o --omf_browse .\objects\main.crf --depend .\objects\main.d)
+F (..\User\main.c)(0x66973375)(--gnu -c --cpu Cortex-M3 -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I ..\CMSIS -I ..\Library\Include -I ..\User -I ..\User\APP\inc-ID:\Keil_v5\GigaDevice\GD32F10x_DFP\2.3.0\Device\Include-D__UVISION_VERSION="536" -DGD32F10X_MD -DUSE_STDPERIPH_DRIVER -DGD32F10X_MD -D__FPU_PRESENT-o .\objects\main.o --omf_browse .\objects\main.crf --depend .\objects\main.d)
 I (..\CMSIS\gd32f10x.h)(0x6684C030)
 I (..\CMSIS\core_cm3.h)(0x6684C030)
 I (D:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x6025237E)
@@ -839,17 +839,18 @@ I (..\Library\Include\gd32f10x_usart.h)(0x6684C030)
 I (..\Library\Include\gd32f10x_wwdgt.h)(0x6684C030)
 I (..\User\systick.h)(0x6684C030)
 I (D:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x60252374)
+I (D:\Keil_v5\ARM\ARMCC\include\string.h)(0x6025237E)
 I (..\User\APP\inc\led_driver.h)(0x6684C030)
 I (..\User\APP\inc\key_driver.h)(0x6684C030)
 I (..\User\APP\inc\oled_driver.h)(0x6684C030)
 I (..\User\APP\inc\tim_driver.h)(0x6684C032)
 I (..\User\main.h)(0x6684C030)
 I (..\User\APP\inc\enc_driver.h)(0x6684C030)
-I (..\User\APP\inc\uart_driver.h)(0x668B4FF3)
+I (..\User\APP\inc\uart_driver.h)(0x6697255E)
 I (..\User\APP\inc\pwm_driver.h)(0x6684C030)
 I (..\User\APP\inc\Photoelectric.h)(0x6684C030)
 I (..\User\APP\inc\hcsr04_driver.h)(0x66850AE4)
-I (..\User\pid.h)(0x6684F53A)
+I (..\User\pid.h)(0x6697255E)
 F (..\User\systick.c)(0x6684C030)(--gnu -c --cpu Cortex-M3 -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I ..\CMSIS -I ..\Library\Include -I ..\User -I ..\User\APP\inc-ID:\Keil_v5\GigaDevice\GD32F10x_DFP\2.3.0\Device\Include-D__UVISION_VERSION="536" -DGD32F10X_MD -DUSE_STDPERIPH_DRIVER -DGD32F10X_MD -D__FPU_PRESENT-o .\objects\systick.o --omf_browse .\objects\systick.crf --depend .\objects\systick.d)
 I (..\CMSIS\gd32f10x.h)(0x6684C030)
 I (..\CMSIS\core_cm3.h)(0x6684C030)
@@ -883,10 +884,10 @@ I (..\Library\Include\gd32f10x_timer.h)(0x6684C030)
 I (..\Library\Include\gd32f10x_usart.h)(0x6684C030)
 I (..\Library\Include\gd32f10x_wwdgt.h)(0x6684C030)
 I (..\User\systick.h)(0x6684C030)
-F (..\User\pid.c)(0x6684F53A)(--gnu -c --cpu Cortex-M3 -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I ..\CMSIS -I ..\Library\Include -I ..\User -I ..\User\APP\inc-ID:\Keil_v5\GigaDevice\GD32F10x_DFP\2.3.0\Device\Include-D__UVISION_VERSION="536" -DGD32F10X_MD -DUSE_STDPERIPH_DRIVER -DGD32F10X_MD -D__FPU_PRESENT-o .\objects\pid.o --omf_browse .\objects\pid.crf --depend .\objects\pid.d)
-I (..\User\pid.h)(0x6684F53A)
+F (..\User\pid.c)(0x6697255E)(--gnu -c --cpu Cortex-M3 -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I ..\CMSIS -I ..\Library\Include -I ..\User -I ..\User\APP\inc-ID:\Keil_v5\GigaDevice\GD32F10x_DFP\2.3.0\Device\Include-D__UVISION_VERSION="536" -DGD32F10X_MD -DUSE_STDPERIPH_DRIVER -DGD32F10X_MD -D__FPU_PRESENT-o .\objects\pid.o --omf_browse .\objects\pid.crf --depend .\objects\pid.d)
+I (..\User\pid.h)(0x6697255E)
 I (D:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x6025237E)
-F (..\User\pid.h)(0x6684F53A)()
+F (..\User\pid.h)(0x6697255E)()
 F (..\User\APP\src\led_driver.c)(0x6684C032)(--gnu -c --cpu Cortex-M3 -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I ..\CMSIS -I ..\Library\Include -I ..\User -I ..\User\APP\inc-ID:\Keil_v5\GigaDevice\GD32F10x_DFP\2.3.0\Device\Include-D__UVISION_VERSION="536" -DGD32F10X_MD -DUSE_STDPERIPH_DRIVER -DGD32F10X_MD -D__FPU_PRESENT-o .\objects\led_driver.o --omf_browse .\objects\led_driver.crf --depend .\objects\led_driver.d)
 I (..\User\APP\inc\led_driver.h)(0x6684C030)
 I (..\User\systick.h)(0x6684C030)
@@ -1058,7 +1059,7 @@ I (..\Library\Include\gd32f10x_spi.h)(0x6684C030)
 I (..\Library\Include\gd32f10x_timer.h)(0x6684C030)
 I (..\Library\Include\gd32f10x_usart.h)(0x6684C030)
 I (..\Library\Include\gd32f10x_wwdgt.h)(0x6684C030)
-F (..\User\APP\src\uart_driver.c)(0x668F4217)(--gnu -c --cpu Cortex-M3 -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I ..\CMSIS -I ..\Library\Include -I ..\User -I ..\User\APP\inc-ID:\Keil_v5\GigaDevice\GD32F10x_DFP\2.3.0\Device\Include-D__UVISION_VERSION="536" -DGD32F10X_MD -DUSE_STDPERIPH_DRIVER -DGD32F10X_MD -D__FPU_PRESENT-o .\objects\uart_driver.o --omf_browse .\objects\uart_driver.crf --depend .\objects\uart_driver.d)
+F (..\User\APP\src\uart_driver.c)(0x6697255E)(--gnu -c --cpu Cortex-M3 -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I ..\CMSIS -I ..\Library\Include -I ..\User -I ..\User\APP\inc-ID:\Keil_v5\GigaDevice\GD32F10x_DFP\2.3.0\Device\Include-D__UVISION_VERSION="536" -DGD32F10X_MD -DUSE_STDPERIPH_DRIVER -DGD32F10X_MD -D__FPU_PRESENT-o .\objects\uart_driver.o --omf_browse .\objects\uart_driver.crf --depend .\objects\uart_driver.d)
 I (D:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x60252374)
 I (D:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x6025237E)
 I (D:\Keil_v5\ARM\ARMCC\include\string.h)(0x6025237E)
@@ -1096,7 +1097,7 @@ I (..\User\systick.h)(0x6684C030)
 I (..\User\APP\inc\led_driver.h)(0x6684C030)
 I (..\User\APP\inc\key_driver.h)(0x6684C030)
 I (..\User\APP\inc\oled_driver.h)(0x6684C030)
-I (..\User\APP\inc\uart_driver.h)(0x668B4FF3)
+I (..\User\APP\inc\uart_driver.h)(0x6697255E)
 F (..\User\APP\src\pwm_driver.c)(0x6684C032)(--gnu -c --cpu Cortex-M3 -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I ..\CMSIS -I ..\Library\Include -I ..\User -I ..\User\APP\inc-ID:\Keil_v5\GigaDevice\GD32F10x_DFP\2.3.0\Device\Include-D__UVISION_VERSION="536" -DGD32F10X_MD -DUSE_STDPERIPH_DRIVER -DGD32F10X_MD -D__FPU_PRESENT-o .\objects\pwm_driver.o --omf_browse .\objects\pwm_driver.crf --depend .\objects\pwm_driver.d)
 I (..\User\APP\inc\pwm_driver.h)(0x6684C030)
 I (D:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x6025237E)
@@ -1169,7 +1170,7 @@ F (..\User\APP\inc\led_driver.h)(0x6684C030)()
 F (..\User\APP\inc\oled_driver.h)(0x6684C030)()
 F (..\User\APP\inc\tim_driver.h)(0x6684C032)()
 F (..\User\APP\inc\enc_driver.h)(0x6684C030)()
-F (..\User\APP\inc\uart_driver.h)(0x668B4FF3)()
+F (..\User\APP\inc\uart_driver.h)(0x6697255E)()
 F (..\User\APP\inc\pwm_driver.h)(0x6684C030)()
 F (..\User\APP\inc\Photoelectric.h)(0x6684C030)()
 F (..\User\APP\src\hcsr04_driver.c)(0x668B513A)(--gnu -c --cpu Cortex-M3 -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I ..\CMSIS -I ..\Library\Include -I ..\User -I ..\User\APP\inc-ID:\Keil_v5\GigaDevice\GD32F10x_DFP\2.3.0\Device\Include-D__UVISION_VERSION="536" -DGD32F10X_MD -DUSE_STDPERIPH_DRIVER -DGD32F10X_MD -D__FPU_PRESENT-o .\objects\hcsr04_driver.o --omf_browse .\objects\hcsr04_driver.crf --depend .\objects\hcsr04_driver.d)
@@ -1210,5 +1211,5 @@ I (..\User\systick.h)(0x6684C030)
 I (..\User\APP\inc\led_driver.h)(0x6684C030)
 I (..\User\APP\inc\key_driver.h)(0x6684C030)
 I (..\User\APP\inc\oled_driver.h)(0x6684C030)
-I (..\User\APP\inc\uart_driver.h)(0x668B4FF3)
+I (..\User\APP\inc\uart_driver.h)(0x6697255E)
 F (..\User\APP\inc\hcsr04_driver.h)(0x66850AE4)()

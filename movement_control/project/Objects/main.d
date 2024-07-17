@@ -33,6 +33,7 @@
 .\objects\main.o: ..\Library\Include\gd32f10x_wwdgt.h
 .\objects\main.o: ..\User\systick.h
 .\objects\main.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+.\objects\main.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 .\objects\main.o: ..\User\APP\inc\led_driver.h
 .\objects\main.o: ..\User\APP\inc\key_driver.h
 .\objects\main.o: ..\User\APP\inc\oled_driver.h
