@@ -1,6 +1,7 @@
 #include "gd32f10x.h"
 #include "systick.h"
 #include <stdio.h>
+#include <string.h>
 #include "led_driver.h"
 #include "key_driver.h"
 #include "oled_driver.h"
@@ -18,6 +19,9 @@ int32_t receive_ball_dis_flag;
 int32_t receive_gate_dis_flag;
 int32_t receive_gate_left_x;
 int32_t receive_gate_right_x;
+
+void reverse(char str[], int length);
+char* intToStr(int num, char* str, int base);
 
 void clear_array(int32_t* array, int32_t length) {
 	int i = 0;
@@ -183,7 +187,8 @@ int main(void) {
 	OLED_Init();   
 	OLED_P6x8Str(10, 0, "---KILLER ROBOT---");
 	delay_1ms(50);
-	USART2_Init(115200);   
+	USART2_Init(115200); 
+	USART1_Init(9600);  
 
 	int32_t ball = 0;        // Ball position
 	int32_t gate = 0;        // Gate position
@@ -219,6 +224,9 @@ int main(void) {
 	int counter = 0;
 	int status = 0;  // status 0: avoiding obstacle; status 1: tracking
 	int state = 0;   // state 0: finding ball; state 1: ball found; state 3/4: ball found, finding gate; state 2: going towards gate
+
+	char txt_to_send[256] = { 0 }; // Increase size to avoid overflow
+	char buffer[64]; // Temporary buffer for integer conversion
 
 	while (1) {
 
@@ -265,7 +273,7 @@ int main(void) {
 			Updateturnballflag(&turnballflag, ball);
 			Updateturngateflag(&turngateflag, gate);
 			
-			pid_closing_ball_near(Enc1, Enc3, ENC * 1.3, &PWM1, &PWM3, ball);
+			pid_closing_ball_near(Enc1, Enc3, ENC * 1.5, &PWM1, &PWM3, ball);
 
 			clear_array(SUM_pid_speed_turn_1, 50);
 			clear_array(SUM_pid_speed_turn_3, 50);
@@ -308,7 +316,88 @@ int main(void) {
 		sprintf(txt, "status: %d, %d", ball_status, state);
 		OLED_P6x8Str(0, 6, txt); // �ַ���
 
+		strcat(txt_to_send, "{\"a\": ");//"ball_cx":
+		strcat(txt_to_send, intToStr(receive_ball_cx, buffer, 10));
+		strcat(txt_to_send, " ,\"b\": ");//"gate_cx":
+		strcat(txt_to_send, intToStr(receive_gate_cx, buffer, 10));
+		strcat(txt_to_send, " ,\"c\": ");//"ball_dis_flag":
+		strcat(txt_to_send, intToStr(receive_ball_dis_flag, buffer, 10));
+		strcat(txt_to_send, " ,\"d\": ");//"gate_dis_flag":
+		strcat(txt_to_send, intToStr(receive_gate_dis_flag, buffer, 10));
+		// strcat(txt_to_send, " ,\"e\": ");//"gate_left_x":
+		// strcat(txt_to_send, intToStr(receive_gate_left_x, buffer, 10));
+		// strcat(txt_to_send, " ,\"f\": ");//"gate_right_x":
+		// strcat(txt_to_send, intToStr(receive_gate_right_x, buffer, 10));
+		strcat(txt_to_send, " ,\"g\": ");//"state":
+		strcat(txt_to_send, intToStr(state, buffer, 10));
+		strcat(txt_to_send, " ,\"h\": ");//"PWM1":
+		strcat(txt_to_send, intToStr(PWM1, buffer, 10));
+		strcat(txt_to_send, " ,\"i\": ");//"PWM2":
+		strcat(txt_to_send, intToStr(PWM2, buffer, 10));
+		strcat(txt_to_send, " ,\"j\": ");//"PWM3":
+		strcat(txt_to_send, intToStr(PWM3, buffer, 10));
+		strcat(txt_to_send, " ,\"k\": ");//"Enc1":
+		strcat(txt_to_send, intToStr(Enc1, buffer, 10));
+		strcat(txt_to_send, " ,\"l\": ");//"Enc2":
+		strcat(txt_to_send, intToStr(Enc2, buffer, 10));
+		strcat(txt_to_send, " ,\"m\": ");//"Enc3":
+		strcat(txt_to_send, intToStr(Enc3, buffer, 10));
+		strcat(txt_to_send, "}\n");
+		send_string(txt_to_send);
+
 		led_toggle();
 		delay_1ms(2);
+		strcpy(txt_to_send, ""); // Clear the string
 	}
+}
+
+void reverse(char str[], int length) {
+    int start = 0;
+    int end = length - 1;
+    while (start < end) {
+        char temp = str[start];
+        str[start] = str[end];
+        str[end] = temp;
+        start++;
+        end--;
+    }
+}
+
+// Function to convert an integer to a string
+char* intToStr(int num, char* str, int base) {
+    int i = 0;
+    int isNegative = 0;
+
+    // Handle 0 explicitly, otherwise empty string is printed for 0
+    if (num == 0) {
+        str[i++] = '0';
+        str[i] = '\0';
+        return str;
+    }
+
+    // In standard itoa(), negative numbers are handled only with
+    // base 10. Otherwise numbers are considered unsigned.
+    if (num < 0 && base == 10) {
+        isNegative = 1;
+        num = -num;
+    }
+
+    // Process individual digits
+    while (num != 0) {
+        int rem = num % base;
+        str[i++] = (rem > 9) ? (rem - 10) + 'a' : rem + '0';
+        num = num / base;
+    }
+
+    // If number is negative, append '-'
+    if (isNegative) {
+        str[i++] = '-';
+    }
+
+    str[i] = '\0'; // Append string terminator
+
+    // Reverse the string
+    reverse(str, i);
+
+    return str;
 }

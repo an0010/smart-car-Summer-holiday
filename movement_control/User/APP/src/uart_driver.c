@@ -115,8 +115,8 @@ void USART2_Init(uint32_t Baud_rate)
 
 void USART_Sent_Byte(uint32_t usart_periph,uint8_t byte)
 {
-    usart_data_transmit(USART2, byte);	    					//ͨ��USART2����
-    while(RESET == usart_flag_get(USART2, USART_FLAG_TBE));		//�жϻ������Ƿ��Ѿ�����
+    usart_data_transmit(usart_periph, byte);	    					//ͨ��USART2����
+    while(RESET == usart_flag_get(usart_periph, USART_FLAG_TBE));		//�жϻ������Ƿ��Ѿ�����
 }
 
 
@@ -147,8 +147,7 @@ void USART_Sent_String(uint32_t usart_periph,char *str)
 void Test_UASRT1(void)
 {
 	//USART�������
-	USART1_Init(115200);                //��ʼ��USART 115200 ʹ�� �����������жϽ���
-	USART2_Init(115200);                //��ʼ��USART 115200 ʹ�� �����������жϽ���
+	USART1_Init(9600);                //��ʼ��USART 115200 ʹ�� �����������жϽ���
 
   OLED_Init();                         // OLED��ʼ��
   OLED_P6x8Str(10, 0,"Test USART1");  // �ַ���
@@ -168,6 +167,12 @@ void Test_UASRT1(void)
 			printf("\nReceive1 OK \n");
 		}
 	}
+}
+
+void send_string(char *str)
+{
+	USART_Sent_String(USART1,str);
+	// USART_Sent_String(USART1,"OK\n");
 }
 
 int32_t Test_UASRT2(void)
