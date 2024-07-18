@@ -147,9 +147,10 @@ void UpdateState(int ball, int gate, int ball_status, int gate_status, int* psta
 	} else if (currentstate == 2) {
 		if (ball_status == 0) {
 			*pstate = 0;
-		} else if (ball_status == 1) {
-			*pstate = 1;
-		} 
+		}
+		// } else if (ball_status == 1) {
+		// 	*pstate = 1;
+		// } 
 		// else if (ball_status == 2) {
 		// 	*pstate = 3;
 		// } 
@@ -275,7 +276,7 @@ int main(void) {
 		if (state == 1) {  // (far from ball) reaching ball, fast
 			Updateturnballflag(&turnballflag, ball);
 			Updateturngateflag(&turngateflag, gate);
-			pid_closing_ball(Enc1, Enc3, ENC * 1.5, SUM_pid_speed_1, SUM_pid_speed_3, &PWM1, &PWM3, &last_ENC__1_1, &last_ENC__1_3, ball);
+			pid_closing_ball(Enc1, Enc3, ENC * 1.7, SUM_pid_speed_1, SUM_pid_speed_3, &PWM1, &PWM3, &last_ENC__1_1, &last_ENC__1_3, ball);
 			PWM2 = 0;
 			clear_array(SUM_pid_speed_turn_1, 50);
 			clear_array(SUM_pid_speed_turn_3, 50);
