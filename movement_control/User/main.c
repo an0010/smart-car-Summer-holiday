@@ -20,8 +20,8 @@ int32_t receive_ball_dis_flag;
 int32_t receive_gate_dis_flag;
 int32_t receive_gate_left_x;
 int32_t receive_gate_right_x;
-int32_t receive_tag_cx;
-int32_t receive_tag_dis;
+// int32_t receive_tag_cx;
+// int32_t receive_tag_dis;
 
 static int state_4_counter = 0;
 
@@ -276,7 +276,7 @@ int main(void) {
 		if (state == 1) {  // (far from ball) reaching ball, fast
 			Updateturnballflag(&turnballflag, ball);
 			Updateturngateflag(&turngateflag, gate);
-			pid_closing_ball(Enc1, Enc3, ENC * 1.7, SUM_pid_speed_1, SUM_pid_speed_3, &PWM1, &PWM3, &last_ENC__1_1, &last_ENC__1_3, ball);
+			pid_closing_ball(Enc1, Enc3, ENC * 2.3, SUM_pid_speed_1, SUM_pid_speed_3, &PWM1, &PWM3, &last_ENC__1_1, &last_ENC__1_3, ball);
 			PWM2 = 0;
 			clear_array(SUM_pid_speed_turn_1, 50);
 			clear_array(SUM_pid_speed_turn_3, 50);
@@ -296,9 +296,9 @@ int main(void) {
 			clear_array(SUM_pid_speed_turn_1, 50);
 			clear_array(SUM_pid_speed_turn_3, 50);
 		} else if (state == 4) { // (very near ball) finding gate
-			PWM1 = -500 * turnballflag;
-			PWM2 = 600 * turnballflag;
-			PWM3 = 1300 * turnballflag;
+			PWM1 = -750 * turnballflag;
+			PWM2 = 900 * turnballflag;
+			PWM3 = 1500 * turnballflag;
 			// if(state_4_counter < 0) {
 			// 	PWM1 = 0;
 			// 	PWM2 = 0;
