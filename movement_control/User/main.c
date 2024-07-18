@@ -137,7 +137,7 @@ void UpdateState(int ball, int gate, int ball_status, int gate_status, int* psta
 		} 
 		else {
 			if (gate_status != 0) {
-				if(80> receive_gate_left_x - (receive_gate_cx-receive_gate_left_x)*2 && (receive_gate_right_x-receive_gate_cx)*2+receive_gate_cx > 80) {
+				if(80> receive_gate_left_x - (receive_gate_cx-receive_gate_left_x)*10 && (receive_gate_right_x-receive_gate_cx)*10+receive_gate_cx > 80) {
 					*pstate = 2;
 					state_4_counter = 0;
 				}
@@ -275,14 +275,14 @@ int main(void) {
 		if (state == 1) {  // (far from ball) reaching ball, fast
 			Updateturnballflag(&turnballflag, ball);
 			Updateturngateflag(&turngateflag, gate);
-			pid_closing_ball(Enc1, Enc3, ENC * 2.0, SUM_pid_speed_1, SUM_pid_speed_3, &PWM1, &PWM3, &last_ENC__1_1, &last_ENC__1_3, ball);
+			pid_closing_ball(Enc1, Enc3, ENC * 1.5, SUM_pid_speed_1, SUM_pid_speed_3, &PWM1, &PWM3, &last_ENC__1_1, &last_ENC__1_3, ball);
 			PWM2 = 0;
 			clear_array(SUM_pid_speed_turn_1, 50);
 			clear_array(SUM_pid_speed_turn_3, 50);
 		} else if (state == 0) { // circling around to find ball
 			Updateturngateflag(&turngateflag, gate);
 			// pid_speed_1_motor(Enc2, ENC * 1.0 * turnballflag, &PWM2, &last_ENC__1_2);
-			pid_speed_3_motor(Enc1, Enc2, Enc3, ENC * 0.30 * turnballflag, &PWM1, &PWM2, &PWM3);
+			pid_speed_3_motor(Enc1, Enc2, Enc3, ENC * 0.350 * turnballflag, &PWM1, &PWM2, &PWM3);
 		} else if (state == 3) { // (near ball) reaching ball, slow
 			Updateturnballflag(&turnballflag, ball);
 			Updateturngateflag(&turngateflag, gate);
@@ -295,19 +295,19 @@ int main(void) {
 			clear_array(SUM_pid_speed_turn_1, 50);
 			clear_array(SUM_pid_speed_turn_3, 50);
 		} else if (state == 4) { // (very near ball) finding gate
-			// PWM1 = -500 * turnballflag;
-			// PWM2 = 600 * turnballflag;
-			// PWM3 = 1300 * turnballflag;
-			if(state_4_counter < 0) {
-				PWM1 = 0;
-				PWM2 = 0;
-				PWM3 = 0;
-			} else {
-				pid_speed_1_motor(Enc2, ENC * 2.5 * turngateflag, &PWM2, &last_ENC__1_2);
-				// pid_ball_area(&PWM1, &PWM3, receive_tag_cx);
-				PWM1 = 0;
-				PWM3 = 0;
-			}
+			PWM1 = -500 * turnballflag;
+			PWM2 = 600 * turnballflag;
+			PWM3 = 1300 * turnballflag;
+			// if(state_4_counter < 0) {
+			// 	PWM1 = 0;
+			// 	PWM2 = 0;
+			// 	PWM3 = 0;
+			// } else {
+			// 	pid_speed_1_motor(Enc2, ENC * 2.5 * turngateflag, &PWM2, &last_ENC__1_2);
+			// 	// pid_ball_area(&PWM1, &PWM3, receive_tag_cx);
+			// 	PWM1 = 0;
+			// 	PWM3 = 0;
+			// }
 			
 
 			// Updateturnballflag(&turnballflag, ball);
@@ -322,7 +322,7 @@ int main(void) {
 			// } else if (Judgegateposi(gate) == -2 || Judgegateposi(gate) == 2) {
 			// 	pid_speed_1_motor(Enc2,ENC*0.65*Judgegateposi(gate), &PWM2, &last_ENC__1_2);
 			// }
-			pid_shot(Enc1, Enc3, ENC*1.0, &PWM1, &PWM3,0);
+			pid_shot(Enc1, Enc3, ENC*0.7, &PWM1, &PWM3,0);
 			pid_speed_1_motor_new(&PWM2, 0.6*receive_gate_left_x+0.4*receive_gate_cx, receive_gate_right_x*0.6+receive_gate_cx*0.4, receive_gate_cx);
 
 			clear_array(SUM_pid_speed_turn_1, 50);
@@ -350,34 +350,34 @@ int main(void) {
 		sprintf(txt, "status: %d, %d", ball_status, state);
 		OLED_P6x8Str(0, 6, txt); // �ַ���
 
-		// strcat(txt_to_send, "{\"a\": ");//"ball_cx":
-		// strcat(txt_to_send, intToStr(receive_ball_cx, buffer, 10));
-		// // strcat(txt_to_send, " ,\"b\": ");//"gate_cx":
-		// // strcat(txt_to_send, intToStr(receive_gate_cx, buffer, 10));
-		// // strcat(txt_to_send, " ,\"c\": ");//"ball_dis_flag":
-		// // strcat(txt_to_send, intToStr(receive_ball_dis_flag, buffer, 10));
-		// // strcat(txt_to_send, " ,\"d\": ");//"gate_dis_flag":
-		// // strcat(txt_to_send, intToStr(receive_gate_dis_flag, buffer, 10));
-		// // strcat(txt_to_send, " ,\"e\": ");//"gate_left_x":
-		// // strcat(txt_to_send, intToStr(receive_gate_left_x, buffer, 10));
-		// // strcat(txt_to_send, " ,\"f\": ");//"gate_right_x":
-		// // strcat(txt_to_send, intToStr(receive_gate_right_x, buffer, 10));
-		// strcat(txt_to_send, " ,\"g\": ");//"state":
-		// strcat(txt_to_send, intToStr(state, buffer, 10));
-		// strcat(txt_to_send, " ,\"h\": ");//"PWM1":
-		// strcat(txt_to_send, intToStr(PWM1, buffer, 10));
-		// strcat(txt_to_send, " ,\"i\": ");//"PWM2":
-		// strcat(txt_to_send, intToStr(PWM2, buffer, 10));
-		// strcat(txt_to_send, " ,\"j\": ");//"PWM3":
-		// strcat(txt_to_send, intToStr(PWM3, buffer, 10));
-		// strcat(txt_to_send, " ,\"k\": ");//"Enc1":
-		// strcat(txt_to_send, intToStr(Enc1, buffer, 10));
-		// strcat(txt_to_send, " ,\"l\": ");//"Enc2":
-		// strcat(txt_to_send, intToStr(Enc2, buffer, 10));
-		// strcat(txt_to_send, " ,\"m\": ");//"Enc3":
-		// strcat(txt_to_send, intToStr(Enc3, buffer, 10));
-		// strcat(txt_to_send, "}\n");
-		// send_string(txt_to_send);
+		strcat(txt_to_send, "{\"a\": ");//"ball_cx":
+		strcat(txt_to_send, intToStr(receive_ball_cx, buffer, 10));
+		// strcat(txt_to_send, " ,\"b\": ");//"gate_cx":
+		// strcat(txt_to_send, intToStr(receive_gate_cx, buffer, 10));
+		// strcat(txt_to_send, " ,\"c\": ");//"ball_dis_flag":
+		// strcat(txt_to_send, intToStr(receive_ball_dis_flag, buffer, 10));
+		// strcat(txt_to_send, " ,\"d\": ");//"gate_dis_flag":
+		// strcat(txt_to_send, intToStr(receive_gate_dis_flag, buffer, 10));
+		// strcat(txt_to_send, " ,\"e\": ");//"gate_left_x":
+		// strcat(txt_to_send, intToStr(receive_gate_left_x, buffer, 10));
+		// strcat(txt_to_send, " ,\"f\": ");//"gate_right_x":
+		// strcat(txt_to_send, intToStr(receive_gate_right_x, buffer, 10));
+		strcat(txt_to_send, " ,\"g\": ");//"state":
+		strcat(txt_to_send, intToStr(state, buffer, 10));
+		strcat(txt_to_send, " ,\"h\": ");//"PWM1":
+		strcat(txt_to_send, intToStr(PWM1, buffer, 10));
+		strcat(txt_to_send, " ,\"i\": ");//"PWM2":
+		strcat(txt_to_send, intToStr(PWM2, buffer, 10));
+		strcat(txt_to_send, " ,\"j\": ");//"PWM3":
+		strcat(txt_to_send, intToStr(PWM3, buffer, 10));
+		strcat(txt_to_send, " ,\"k\": ");//"Enc1":
+		strcat(txt_to_send, intToStr(Enc1, buffer, 10));
+		strcat(txt_to_send, " ,\"l\": ");//"Enc2":
+		strcat(txt_to_send, intToStr(Enc2, buffer, 10));
+		strcat(txt_to_send, " ,\"m\": ");//"Enc3":
+		strcat(txt_to_send, intToStr(Enc3, buffer, 10));
+		strcat(txt_to_send, "}\n");
+		send_string(txt_to_send);
 
 		led_toggle();
 		delay_1ms(2);
