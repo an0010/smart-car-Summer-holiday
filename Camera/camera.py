@@ -55,7 +55,7 @@ ch = 0
 thresholds = [
 #    (0, 100, -128, 42, -128, 127),
 #    (21, 89, -56, 4, 33, 77),     #520房间阈值
-    (0, 100, -128, 29, -128, 127),
+    (0, 100, -128, 25, -128, 127),
     (21, 89, -56, 4, 33, 77),     #519房间阈值
 ]
 
@@ -131,7 +131,7 @@ def search_ball(img):
 #            print("circ_x:", x)
 
             #whether the ball is too close
-            if max_blob.area()>7000:
+            if max_blob.area()>3000:
                 ball_dis_flag = 3
             elif max_blob.area()>2000:
                 ball_dis_flag = 2
@@ -149,7 +149,7 @@ def search_ball(img):
 #            print("circ_x:", x)
 
             #whether the ball is too close
-            if max_blob.area()>7000:
+            if max_blob.area()>3000:
                 ball_dis_flag = 3
             elif max_blob.area()>2000:
                 ball_dis_flag = 2
